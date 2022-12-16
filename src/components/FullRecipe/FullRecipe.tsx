@@ -1,0 +1,73 @@
+import React, {useState} from "react";
+import ShowButton from "../Button/ShowButton";
+import Ingridient from "../Ingridient/Ingridient";
+import classes from './FullRecipe.module.css'
+import { flipInY } from 'react-animations';
+import styled, { keyframes } from 'styled-components';
+
+type Props = {
+    dish: any,
+    limit: number
+};
+const flipInYAnimation = keyframes`${flipInY}`;
+const FlipInYDiv = styled.div`animation: 1.25s ${flipInYAnimation}`;
+
+const FullRecipe = ({dish , limit}: Props) => {
+
+    const [showAll, setShowAll] = useState(false);
+
+    const showMore = () => setShowAll(true);
+    const showLess = () => setShowAll(false);
+
+    
+
+    const toShow = dish.recipe.substring(0, limit) + "...";
+    
+    if(dish.recipe.length <= limit) {
+        return (
+        <div className={classes.dish_content}>
+           
+            <div className="dish_ingridienst">{dish.ingridients.map((ingridient: any) =>
+                <Ingridient name={ingridient.name} quantity={ingridient.quantity}/>
+                )}
+            </div>
+            <div className='dish_recipe'>{dish.recipe}</div>
+            
+        </div>)
+    }
+    if (showAll) {
+        return (
+            <FlipInYDiv>
+                <div className={classes.container}>
+                    <div className={classes.dish_content}>
+                        <div>
+                            <h2>Ingridients</h2>
+                            <div className="dish_ingridients">{dish.ingridients.map((ingridient: any) =>
+                                <Ingridient name={ingridient.name} quantity={ingridient.quantity}/>
+                                )}
+                            </div>
+                        </div> 
+                        <div className={classes.dish_method}>
+                            <h2>Method</h2>
+                            <div className='dish_recipe'>{dish.recipe}</div>
+                        </div>
+                        
+                    </div>
+                    <ShowButton className={classes.button_show_recipe} onClick={showLess}>Show less</ShowButton>
+                </div>
+            </FlipInYDiv>
+            
+        )
+    }
+
+    return(
+        <div>
+            {toShow}
+            <ShowButton className={classes.button_show_recipe} onClick={showMore}>Show more</ShowButton>
+        </div>
+        )
+    
+}
+
+
+export default FullRecipe;

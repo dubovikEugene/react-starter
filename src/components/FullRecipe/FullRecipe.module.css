@@ -1,0 +1,19 @@
+.dish_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    
+}
+
+.dish_content h2 {
+    margin-bottom: 15px;
+}
+
+.dish_method {
+    width: 50%;
+}
+
+.container {
+    justify-content: center;
+}
