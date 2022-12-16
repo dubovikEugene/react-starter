@@ -40,9 +40,9 @@ const FullRecipe = ({dish , limit}: Props) => {
             <FlipInYDiv>
                 <div className={classes.container}>
                     <div className={classes.dish_content}>
-                        <div>
+                        <div className={classes.dish_ingridients}>
                             <h2>Ingridients</h2>
-                            <div className="dish_ingridients">{dish.ingridients.map((ingridient: any) =>
+                            <div >{dish.ingridients.map((ingridient: any) =>
                                 <Ingridient name={ingridient.name} quantity={ingridient.quantity}/>
                                 )}
                             </div>

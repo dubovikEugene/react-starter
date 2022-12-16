@@ -13,6 +13,9 @@
 .dish_method {
     width: 50%;
 }
+.dish_ingridients {
+    width: 50%;
+}
 
 .container {
     justify-content: center;
