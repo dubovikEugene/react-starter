@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import ShowButton from "../Button/ShowButton";
-import Ingridient from "../Ingridient/Ingridient";
+import Ingredient from "./Ingredient/Ingredient";
 import classes from "./FullRecipe.module.css";
 import { flipInY } from "react-animations";
 import styled, { keyframes } from "styled-components";
+import FullRecipeType from "../../types/FullRecipeType";
+import Button from "react-bootstrap/esm/Button";
 
-type Props = {
-  dish: any;
-  limit: number;
-};
 const flipInYAnimation = keyframes`${flipInY}`;
 const FlipInYDiv = styled.div`
   animation: 1.25s ${flipInYAnimation};
@@ -16,7 +13,7 @@ const FlipInYDiv = styled.div`
 
 const CHARACTER_LIMIT = 100;
 
-const FullRecipe = ({ dish, limit }: Props) => {
+const FullRecipe = ({ dish, limit }: FullRecipeType) => {
   const [showAll, setShowAll] = useState(false);
   const toggleShowAll = () => setShowAll(!showAll);
   const shortDishRecipe = dish.recipe.substring(0, limit) + "...";
@@ -24,19 +21,21 @@ const FullRecipe = ({ dish, limit }: Props) => {
 
   const toggleView = () =>
     isShortDescription ? null : (
-      <ShowButton
-        className={classes.button_show_recipe}
-        onClick={toggleShowAll}
-      >
+      <Button className={classes.button_show_recipe} onClick={toggleShowAll}>
         Toggle view
-      </ShowButton>
+      </Button>
+      // <ShowButton
+      //   className={classes.button_show_recipe}
+      //   onClick={toggleShowAll}
+      // >
+      //   Toggle view
+      // </ShowButton>
     );
 
   const shortView = () => (
     <div className={classes.container}>
       <div className={classes.dish_content}>
-        <div className="dish_ingridienst">
-        </div>
+        <div className="dish_ingridienst"></div>
         <div className="dish_recipe">{shortDishRecipe}</div>
       </div>
       {toggleView()}
@@ -50,7 +49,7 @@ const FullRecipe = ({ dish, limit }: Props) => {
           <h2>Ingridients</h2>
           <div>
             {dish.ingridients.map((ingridient: any) => (
-              <Ingridient
+              <Ingredient
                 name={ingridient.name}
                 quantity={ingridient.quantity}
               />
