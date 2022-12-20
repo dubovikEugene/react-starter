@@ -1,0 +1,11 @@
+.ingredient_container {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px dashed teal;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.ingredient_name {
+  width: 75%;
+}
