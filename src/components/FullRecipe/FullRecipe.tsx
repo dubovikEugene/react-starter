@@ -3,8 +3,13 @@ import Ingredient from "./Ingredient/Ingredient";
 import classes from "./FullRecipe.module.css";
 import { flipInY } from "react-animations";
 import styled, { keyframes } from "styled-components";
-import FullRecipeType from "../../types/FullRecipeType";
 import Button from "react-bootstrap/esm/Button";
+import { Dish } from "../../types/Dish";
+
+interface IFullRecipeProps {
+  dish: Dish;
+  limit: number;
+}
 
 const flipInYAnimation = keyframes`${flipInY}`;
 const FlipInYDiv = styled.div`
@@ -13,7 +18,7 @@ const FlipInYDiv = styled.div`
 
 const CHARACTER_LIMIT = 100;
 
-const FullRecipe = ({ dish, limit }: FullRecipeType) => {
+const FullRecipe = ({ dish, limit }: IFullRecipeProps) => {
   const [showAll, setShowAll] = useState(false);
   const toggleShowAll = () => setShowAll(!showAll);
   const shortDishRecipe = dish.recipe.substring(0, limit) + "...";
@@ -21,15 +26,13 @@ const FullRecipe = ({ dish, limit }: FullRecipeType) => {
 
   const toggleView = () =>
     isShortDescription ? null : (
-      <Button className={classes.button_show_recipe} onClick={toggleShowAll}>
+      <Button
+        variant="outline-success"
+        className="mt-2"
+        onClick={toggleShowAll}
+      >
         Toggle view
       </Button>
-      // <ShowButton
-      //   className={classes.button_show_recipe}
-      //   onClick={toggleShowAll}
-      // >
-      //   Toggle view
-      // </ShowButton>
     );
 
   const shortView = () => (
