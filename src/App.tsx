@@ -2,13 +2,13 @@ import React from "react";
 import "./styles/App.css";
 import DishItem from "./components/DishItem/DishItem";
 import DishType from "./types/DishType";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const dishesData = require("./recipes.json");
 
 // const DISHES = dishesData.recipes;
 
 function App() {
-  console.log(dishesData);
   return (
     <div className="App">
       {dishesData.recipes.map((dish: DishType) => (
