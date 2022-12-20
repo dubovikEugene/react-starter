@@ -1,8 +1,7 @@
-import styled from "@emotion/styled";
 import React from "react";
 import { Dish } from "../../types/Dish";
 import FullRecipe from "../FullRecipe/FullRecipe";
-import classes from "./DishItem.module.css";
+import styled from "@emotion/styled";
 
 const DishContainer = styled.div`
   display: flex;
@@ -30,7 +29,7 @@ const DishItem = (dish: Dish) => {
     <DishContainer>
       <Header>
         <DishName>{dish.name}</DishName>
-        <img src={`${dish.img}`} className={classes.dish_image} />
+        <img src={`${dish.img}`} />
       </Header>
       <FullRecipe dish={dish} limit={100} />
     </DishContainer>
