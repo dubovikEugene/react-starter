@@ -8,10 +8,16 @@ interface IIngredientProps {
 
 const Container = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  border-bottom: 2px dashed teal;
+  border-bottom: 1px dashed teal;
   justify-content: space-between;
   margin-top: 8px;
+  transition: all 0.4s easy-in-out;
+
+  &:hover {
+    color: teal;
+  }
 `;
 
 const Name = styled.div`

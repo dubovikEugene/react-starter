@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import Ingredient from "./Ingredient/Ingredient";
-import { flipInY } from "react-animations";
+import Card from "react-bootstrap/Card";
 import styled, { keyframes } from "styled-components";
-import Button from "react-bootstrap/esm/Button";
-import { Dish } from "../../types/Dish";
+import useFetch from "../../hooks/useFetch.hook";
 
-interface IFullRecipeProps {
-  dish: Dish;
-  limit: number;
+interface IFullRecipe {
+  cookingTime: number;
+  id: string;
+  img: string;
+  ingridients: { name: string; quantity: string }[];
+  name: string;
+  recipe: string;
+}
+
+interface IId {
+  id: string;
 }
 
 const Container = styled.div`
   justify-content: center;
+  color: black;
+  flex-wrap: wrap;
 `;
 
 const Content = styled.div`
@@ -19,73 +28,56 @@ const Content = styled.div`
   flex-direction: row;
   justify-content: center;
   gap: 20px;
+  margin-top: 5px;
 `;
-const RecipeParts = styled.h3`
+const RecipeParts = styled.div`
+  font-size: 20px;
+  font-style: bold;
   margin-bottom: 15px;
 `;
 const RecipePartsContainer = styled.div`
-  width: 50%; ;
+  width: 50%;
 `;
 
-const flipInYAnimation = keyframes`${flipInY}`;
-const FlipInYDiv = styled.div`
-  animation: 1.25s ${flipInYAnimation};
-`;
+const FullRecipe = (id: IId) => {
+  const { data, loading, error } = useFetch<IFullRecipe>(id.id);
 
-const CHARACTER_LIMIT = 100;
-
-const FullRecipe = ({ dish, limit }: IFullRecipeProps) => {
-  const [showAll, setShowAll] = useState(false);
-  const toggleShowAll = () => setShowAll(!showAll);
-  const shortDishRecipe = dish.recipe.substring(0, limit) + "...";
-  const isShortDescription = dish.recipe.length <= CHARACTER_LIMIT; // indicates visibility of btn && initial view
-
-  const toggleView = () =>
-    isShortDescription ? null : (
-      <Button
-        variant="outline-success"
-        className="mt-2"
-        onClick={toggleShowAll}
-      >
-        Toggle view
-      </Button>
-    );
-
-  const shortView = () => (
-    <Container>
-      <Content>
-        <div>{shortDishRecipe}</div>
-      </Content>
-      {toggleView()}
-    </Container>
+  return (
+    <Card style={{ width: "800px" }}>
+      <Card.Body>
+        <Container>
+          <Content>
+            <RecipePartsContainer>
+              <img src={`${data?.img}`} />
+            </RecipePartsContainer>
+            <RecipePartsContainer>
+              <div className="justify-content-center">
+                Cooking time (min): {data?.cookingTime}
+              </div>
+            </RecipePartsContainer>
+          </Content>
+          <Content>
+            <RecipePartsContainer>
+              <RecipeParts>Ingredients</RecipeParts>
+              <div>
+                {data?.ingridients.map((ingridient: any) => (
+                  <Ingredient
+                    name={ingridient.name}
+                    quantity={ingridient.quantity}
+                    key={ingridient.name}
+                  />
+                ))}
+              </div>
+            </RecipePartsContainer>
+            <RecipePartsContainer>
+              <RecipeParts>Method</RecipeParts>
+              <div>{data?.recipe}</div>
+            </RecipePartsContainer>
+          </Content>
+        </Container>
+      </Card.Body>
+    </Card>
   );
-
-  const fullView = () => (
-    <Container>
-      <Content>
-        <RecipePartsContainer>
-          <RecipeParts>Ingredients</RecipeParts>
-          <div>
-            {dish.ingridients.map((ingridient: any) => (
-              <Ingredient
-                name={ingridient.name}
-                quantity={ingridient.quantity}
-              />
-            ))}
-          </div>
-        </RecipePartsContainer>
-        <RecipePartsContainer>
-          <RecipeParts>Method</RecipeParts>
-          <div>{dish.recipe}</div>
-        </RecipePartsContainer>
-      </Content>
-      {toggleView()}
-    </Container>
-  );
-
-  if (isShortDescription) return fullView();
-  if (showAll) return <FlipInYDiv>{fullView()}</FlipInYDiv>;
-  return shortView();
 };
 
 export default FullRecipe;
