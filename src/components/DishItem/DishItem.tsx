@@ -1,18 +1,38 @@
 import React from "react";
-import DishType from "../../types/DishType";
+import { Dish } from "../../types/Dish";
 import FullRecipe from "../FullRecipe/FullRecipe";
-import classes from "./DishItem.module.css";
+import styled from "@emotion/styled";
 
-const DishItem = (props: DishType) => {
-  console.log(props);
+const DishContainer = styled.div`
+  display: flex;
+  padding: 15px;
+  border: 2px solid teal;
+  margin: 15px 0;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const DishName = styled.h2`
+  text-align: center;
+  width: 100%;
+`;
+
+const Header = styled.div`
+  display: flex;
+  // flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const DishItem = (dish: Dish) => {
   return (
-    <div className={classes.dish_item_container}>
-      <div className={classes.dish_header}>
-        <h1 className={classes.dish_name}>{props.name}</h1>
-        <img src={`${props.img}`} className={classes.dish_image} />
-      </div>
-      <FullRecipe dish={props} limit={100} />
-    </div>
+    <DishContainer>
+      <Header>
+        <DishName>{dish.name}</DishName>
+        <img src={`${dish.img}`} />
+      </Header>
+      <FullRecipe dish={dish} limit={100} />
+    </DishContainer>
   );
 };
 

@@ -1,10 +1,31 @@
 import React, { useState } from "react";
 import Ingredient from "./Ingredient/Ingredient";
-import classes from "./FullRecipe.module.css";
 import { flipInY } from "react-animations";
 import styled, { keyframes } from "styled-components";
-import FullRecipeType from "../../types/FullRecipeType";
 import Button from "react-bootstrap/esm/Button";
+import { Dish } from "../../types/Dish";
+
+interface IFullRecipeProps {
+  dish: Dish;
+  limit: number;
+}
+
+const Container = styled.div`
+  justify-content: center;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+`;
+const RecipeParts = styled.h3`
+  margin-bottom: 15px;
+`;
+const RecipePartsContainer = styled.div`
+  width: 50%; ;
+`;
 
 const flipInYAnimation = keyframes`${flipInY}`;
 const FlipInYDiv = styled.div`
@@ -13,7 +34,7 @@ const FlipInYDiv = styled.div`
 
 const CHARACTER_LIMIT = 100;
 
-const FullRecipe = ({ dish, limit }: FullRecipeType) => {
+const FullRecipe = ({ dish, limit }: IFullRecipeProps) => {
   const [showAll, setShowAll] = useState(false);
   const toggleShowAll = () => setShowAll(!showAll);
   const shortDishRecipe = dish.recipe.substring(0, limit) + "...";
@@ -21,32 +42,29 @@ const FullRecipe = ({ dish, limit }: FullRecipeType) => {
 
   const toggleView = () =>
     isShortDescription ? null : (
-      <Button className={classes.button_show_recipe} onClick={toggleShowAll}>
+      <Button
+        variant="outline-success"
+        className="mt-2"
+        onClick={toggleShowAll}
+      >
         Toggle view
       </Button>
-      // <ShowButton
-      //   className={classes.button_show_recipe}
-      //   onClick={toggleShowAll}
-      // >
-      //   Toggle view
-      // </ShowButton>
     );
 
   const shortView = () => (
-    <div className={classes.container}>
-      <div className={classes.dish_content}>
-        <div className="dish_ingridienst"></div>
-        <div className="dish_recipe">{shortDishRecipe}</div>
-      </div>
+    <Container>
+      <Content>
+        <div>{shortDishRecipe}</div>
+      </Content>
       {toggleView()}
-    </div>
+    </Container>
   );
 
   const fullView = () => (
-    <div className={classes.container}>
-      <div className={classes.dish_content}>
-        <div className={classes.dish_ingridients}>
-          <h2>Ingridients</h2>
+    <Container>
+      <Content>
+        <RecipePartsContainer>
+          <RecipeParts>Ingredients</RecipeParts>
           <div>
             {dish.ingridients.map((ingridient: any) => (
               <Ingredient
@@ -55,14 +73,14 @@ const FullRecipe = ({ dish, limit }: FullRecipeType) => {
               />
             ))}
           </div>
-        </div>
-        <div className={classes.dish_method}>
-          <h2>Method</h2>
-          <div className="dish_recipe">{dish.recipe}</div>
-        </div>
-      </div>
+        </RecipePartsContainer>
+        <RecipePartsContainer>
+          <RecipeParts>Method</RecipeParts>
+          <div>{dish.recipe}</div>
+        </RecipePartsContainer>
+      </Content>
       {toggleView()}
-    </div>
+    </Container>
   );
 
   if (isShortDescription) return fullView();

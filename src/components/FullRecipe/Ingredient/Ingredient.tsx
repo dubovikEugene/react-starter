@@ -1,14 +1,34 @@
 import React from "react";
-import IngredientType from "../../../types/IngredientType";
-import classes from "./Ingredient.module.css";
+import styled from "@emotion/styled";
 
-const Ingredient = ({ name, quantity }: IngredientType) => {
+interface IIngredientProps {
+  name: string;
+  quantity: string;
+}
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 2px dashed teal;
+  justify-content: space-between;
+  margin-top: 8px;
+`;
+
+const Name = styled.div`
+  width: 75%;
+`;
+
+const Quantity = styled.div`
+  font-style: italic;
+`;
+
+const IngredientComponent = ({ name, quantity }: IIngredientProps) => {
   return (
-    <div className={classes.ingredient_container}>
-      <div className={classes.ingredient_name}>{name}</div>
-      <div className={classes.ingredient_quantity}>{quantity}</div>
-    </div>
+    <Container>
+      <Name>{name}</Name>
+      <Quantity>{quantity}</Quantity>
+    </Container>
   );
 };
 
-export default Ingredient;
+export default IngredientComponent;
