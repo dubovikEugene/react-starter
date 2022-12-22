@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+interface IError {
+  code: string;
+  config: any;
+  message: string;
+  name: string;
+  request: any;
+  response: any;
+  stack: any;
+}
+
 const useFetch = <T>(url: string) => {
   const [data, setData] = useState<T | null>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<IError>();
 
   useEffect(() => {
     setLoading(true);

@@ -36,7 +36,9 @@ const RecipeList = () => {
   if (error)
     return (
       <Alert variant="danger" className="mx-auto justify-content-center mt-5">
-        Ooops! Something went wrong
+        <h3>Ooops! Something went wrong</h3>
+        <p>{error.message}. </p>
+        <p>{error.response.data}</p>
       </Alert>
     );
 
@@ -59,9 +61,8 @@ const RecipeList = () => {
             <div style={{ minHeight: "0px", marginTop: "5px" }}>
               <Collapse in={active == recipe.id} dimension="width">
                 <div id="example-collapse-text">
-                  {/* <Card style={{ width: "800px" }}> */}
                   <FullRecipe id={recipe.id} />
-                  {/* </Card> */}
+                  {/* maybe id={active} */}
                 </div>
               </Collapse>
             </div>
