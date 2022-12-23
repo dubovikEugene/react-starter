@@ -1,21 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ingredient from "./Ingredient/Ingredient";
 import Card from "react-bootstrap/Card";
 import styled, { keyframes } from "styled-components";
 import useFetch from "../../hooks/useFetch.hook";
-
-interface IFullRecipe {
-  cookingTime: number;
-  id: string;
-  img: string;
-  ingridients: { name: string; quantity: string }[];
-  name: string;
-  recipe: string;
-}
-
-interface IId {
-  id: string;
-}
+import { IFullRecipe } from "../../types/IFullRecipe";
+import axios from "axios";
+import { State } from "../../redux/reducers";
+import { actionCreators } from "../../redux";
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const Container = styled.div`
   justify-content: center;
@@ -39,8 +32,29 @@ const RecipePartsContainer = styled.div`
   width: 50%;
 `;
 
-const FullRecipe = (id: IId) => {
-  const { data, loading, error } = useFetch<IFullRecipe>(id.id);
+const FullRecipe = ({ id }: { id: string }) => {
+  // const { data, loading, error } = useFetch<IFullRecipe>(id);
+
+  const recipe: IFullRecipe = useSelector((state: State) => state.recipe);
+  const dispatch = useDispatch();
+  const { selectedRecipe } = bindActionCreators(actionCreators, dispatch);
+
+  const fetchRecipeList = async () => {
+    console.log(`New request ${id}`);
+    await axios
+      .get(`https://api.workstmt.com/!yauheni/${id}`)
+      .then((response) => {
+        selectedRecipe(response.data);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchRecipeList();
+  }, []);
 
   return (
     <Card style={{ width: "800px" }}>
@@ -48,11 +62,11 @@ const FullRecipe = (id: IId) => {
         <Container>
           <Content>
             <RecipePartsContainer>
-              <img src={`${data?.img}`} />
+              <img src={`${recipe.img}`} />
             </RecipePartsContainer>
             <RecipePartsContainer>
               <div className="justify-content-center">
-                Cooking time (min): {data?.cookingTime}
+                Cooking time (min): {recipe.cookingTime}
               </div>
             </RecipePartsContainer>
           </Content>
@@ -60,7 +74,7 @@ const FullRecipe = (id: IId) => {
             <RecipePartsContainer>
               <RecipeParts>Ingredients</RecipeParts>
               <div>
-                {data?.ingridients.map((ingridient: any) => (
+                {recipe.ingridients.map((ingridient: any) => (
                   <Ingredient
                     name={ingridient.name}
                     quantity={ingridient.quantity}
@@ -71,7 +85,7 @@ const FullRecipe = (id: IId) => {
             </RecipePartsContainer>
             <RecipePartsContainer>
               <RecipeParts>Method</RecipeParts>
-              <div>{data?.recipe}</div>
+              <div>{recipe.recipe}</div>
             </RecipePartsContainer>
           </Content>
         </Container>
