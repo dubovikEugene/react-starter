@@ -24,7 +24,6 @@ const RecipeList = () => {
   const [open, setOpen] = useState(false);
 
   const fetchRecipeList = async () => {
-    console.log(`new request in recipe list`);
     await axios
       .get(`https://api.workstmt.com/!yauheni/${RECIPE_LIST_URL}`)
       .then((response) => {
@@ -37,7 +36,9 @@ const RecipeList = () => {
   };
 
   useEffect(() => {
-    fetchRecipeList();
+    setTimeout(() => {
+      fetchRecipeList();
+    }, 1000);
   }, []);
 
   const toggleState = (id: string) => {
@@ -45,14 +46,6 @@ const RecipeList = () => {
     setActive(active == id ? "" : id);
   };
 
-  // if (loading)
-  //   return (
-  //     <Spinner
-  //       animation="border"
-  //       variant="success"
-  //       className="mx-auto justify-content-center mt-5"
-  //     />
-  //   );
   // if (error)
   //   return (
   //     <Alert variant="danger" className="mx-auto justify-content-center mt-5">
@@ -61,33 +54,40 @@ const RecipeList = () => {
   //       <p>{error.response?.data}</p>
   //     </Alert>
   //   );
-
   return (
     <>
-      <ListGroup className="w-100 mx-auto justify-content-center mt-4">
-        {recipes.recipes.map((recipe) => (
-          <div key={recipe.id}>
-            <ListGroup.Item
-              role="button"
-              className={`p-3 ${active == recipe.id && "active"}`}
-              aria-controls="example-collapse-text"
-              aria-expanded={open}
-              onClick={() => {
-                toggleState(recipe.id);
-              }}
-            >
-              <div className="text-center">{recipe.name}</div>
-            </ListGroup.Item>
-            <div style={{ minHeight: "0px", marginTop: "5px" }}>
-              <Collapse in={active == recipe.id} dimension="width">
-                <div id="example-collapse-text">
-                  <FullRecipe id={recipe.id} />
-                </div>
-              </Collapse>
+      {Object.keys(recipes.recipes).length === 0 ? (
+        <Spinner
+          animation="border"
+          variant="success"
+          className="mx-auto justify-content-center mt-5"
+        />
+      ) : (
+        <ListGroup className="w-100 mx-auto justify-content-center mt-4">
+          {recipes.recipes.map((recipe) => (
+            <div key={recipe.id}>
+              <ListGroup.Item
+                role="button"
+                className={`p-3 ${active == recipe.id && "active"}`}
+                aria-controls="example-collapse-text"
+                aria-expanded={open}
+                onClick={() => {
+                  toggleState(recipe.id);
+                }}
+              >
+                <div className="text-center">{recipe.name}</div>
+              </ListGroup.Item>
+              <div style={{ minHeight: "0px", marginTop: "5px" }}>
+                <Collapse in={active == recipe.id} dimension="width">
+                  <div id="example-collapse-text">
+                    {active === recipe.id && <FullRecipe id={active} />}
+                  </div>
+                </Collapse>
+              </div>
             </div>
-          </div>
-        ))}
-      </ListGroup>
+          ))}
+        </ListGroup>
+      )}
     </>
   );
 };
