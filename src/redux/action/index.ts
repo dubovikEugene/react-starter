@@ -11,4 +11,8 @@ interface SelectedRecipe {
   payload: IFullRecipe;
 }
 
-export type Action = SetRecipes | SelectedRecipe;
+interface RemoveSelectedRecipe {
+  type: ActionTypes.REMOVE_SELECTED_RECIPE;
+}
+
+export type Action = SetRecipes | SelectedRecipe | RemoveSelectedRecipe;

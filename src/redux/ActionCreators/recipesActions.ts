@@ -21,3 +21,11 @@ export const selectedRecipe = (recipe: IFullRecipe) => {
     });
   };
 };
+
+export const removeSelectedRecipe = () => {
+  return (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionTypes.REMOVE_SELECTED_RECIPE,
+    });
+  };
+};
