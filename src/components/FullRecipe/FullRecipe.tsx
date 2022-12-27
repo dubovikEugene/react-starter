@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Spinner } from "react-bootstrap";
 import { flipInY } from "react-animations";
+import { useGetRecipeQuery } from "../../api/apiSlice";
 
 const Container = styled.div`
   justify-content: center;
@@ -41,39 +42,40 @@ const FlipInYDiv = styled.div`
 
 const FullRecipe = ({ id }: { id: string }) => {
   // const { data, loading, error } = useFetch<IFullRecipe>(id);
+  const { data, isLoading } = useGetRecipeQuery(id);
 
-  const recipe: IFullRecipe = useSelector((state: State) => state.recipe);
-  const dispatch = useDispatch();
-  const { selectedRecipe, removeSelectedRecipe } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
+  // const recipe: IFullRecipe = useSelector((state: State) => state.recipe);
+  // const dispatch = useDispatch();
+  // const { selectedRecipe, removeSelectedRecipe } = bindActionCreators(
+  //   actionCreators,
+  //   dispatch
+  // );
 
-  const fetchRecipeList = () => {
-    axios
-      .get(`https://api.workstmt.com/!yauheni/${id}`)
-      .then((response) => {
-        setTimeout(() => {
-          selectedRecipe(response.data);
-        }, 1000);
-      })
+  // const fetchRecipeList = () => {
+  //   axios
+  //     .get(`https://api.workstmt.com/!yauheni/${id}`)
+  //     .then((response) => {
+  //       setTimeout(() => {
+  //         selectedRecipe(response.data);
+  //       }, 1000);
+  //     })
 
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  useEffect(() => {
-    fetchRecipeList();
+  // useEffect(() => {
+  //   fetchRecipeList();
 
-    return () => {
-      removeSelectedRecipe();
-    };
-  }, [id]);
+  //   return () => {
+  //     removeSelectedRecipe();
+  //   };
+  // }, [id]);
 
   return (
     <>
-      {Object.keys(recipe).length === 0 ? (
+      {isLoading ? (
         <div className="d-flex">
           <Spinner
             animation="border"
@@ -88,11 +90,11 @@ const FullRecipe = ({ id }: { id: string }) => {
               <Container>
                 <Content>
                   <RecipePartsContainer>
-                    <img src={`${recipe.img}`} />
+                    <img src={`${data?.img}`} />
                   </RecipePartsContainer>
                   <RecipePartsContainer>
                     <div className="justify-content-center">
-                      Cooking time (min): {recipe.cookingTime}
+                      Cooking time (min): {data?.cookingTime}
                     </div>
                   </RecipePartsContainer>
                 </Content>
@@ -100,7 +102,7 @@ const FullRecipe = ({ id }: { id: string }) => {
                   <RecipePartsContainer>
                     <RecipeParts>Ingredients</RecipeParts>
                     <div>
-                      {recipe.ingridients.map((ingridient: any) => (
+                      {data?.ingridients.map((ingridient: any) => (
                         <Ingredient
                           name={ingridient.name}
                           quantity={ingridient.quantity}
@@ -111,7 +113,7 @@ const FullRecipe = ({ id }: { id: string }) => {
                   </RecipePartsContainer>
                   <RecipePartsContainer>
                     <RecipeParts>Method</RecipeParts>
-                    <div>{recipe.recipe}</div>
+                    <div>{data?.recipe}</div>
                   </RecipePartsContainer>
                 </Content>
               </Container>

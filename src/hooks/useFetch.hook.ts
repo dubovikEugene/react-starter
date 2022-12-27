@@ -13,11 +13,11 @@ interface IError {
 
 const useFetch = <T>(url: string) => {
   const [data, setData] = useState<T>();
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<IError>();
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     console.log("new request");
     axios
       .get(
@@ -34,13 +34,13 @@ const useFetch = <T>(url: string) => {
       })
       .catch((err) => {
         setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
+    // .finally(() => {
+    // setLoading(false);
+    // });
   }, [url]);
 
-  return { data, loading, error };
+  return { data, error };
 };
 
 export default useFetch;
