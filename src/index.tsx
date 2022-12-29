@@ -1,15 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux/es/exports";
+import store from "./redux/store";
+import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
+import { recipeApi } from "./api/apiSlice";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ApiProvider api={recipeApi}>
+        <App />
+      </ApiProvider>
+    </Provider>
   </React.StrictMode>
 );
 
