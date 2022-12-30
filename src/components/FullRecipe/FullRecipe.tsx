@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { FC } from "react";
 import Ingredient from "./Ingredient/Ingredient";
 import Card from "react-bootstrap/Card";
 import styled, { keyframes } from "styled-components";
-import useFetch from "../../hooks/useFetch.hook";
-import { IFullRecipe } from "../../types/IFullRecipe";
-import axios from "axios";
-import { State } from "../../redux/reducers";
-import { actionCreators } from "../../redux";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Spinner } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
 import { flipInY } from "react-animations";
-import { useGetRecipeQuery } from "../../api/apiSlice";
+import { useGetRecipeByIdQuery } from "../../services/RecipeService";
 
 const Container = styled.div`
   justify-content: center;
@@ -40,89 +33,75 @@ const FlipInYDiv = styled.div`
   animation: 1.25s ${flipInYAnimation};
 `;
 
-const FullRecipe = ({ id }: { id: string }) => {
-  // const { data, loading, error } = useFetch<IFullRecipe>(id);
-  const { data, isLoading } = useGetRecipeQuery(id);
+const FullRecipe: FC<{ id: string }> = ({ id }) => {
+  const { data, isLoading, error } = useGetRecipeByIdQuery(id);
 
-  // const recipe: IFullRecipe = useSelector((state: State) => state.recipe);
-  // const dispatch = useDispatch();
-  // const { selectedRecipe, removeSelectedRecipe } = bindActionCreators(
-  //   actionCreators,
-  //   dispatch
-  // );
+  const loadingView = () => {
+    return (
+      <div className="d-flex">
+        <Spinner
+          animation="border"
+          variant="success"
+          className="mx-auto justify-content-center mt-1"
+        />
+      </div>
+    );
+  };
 
-  // const fetchRecipeList = () => {
-  //   axios
-  //     .get(`https://api.workstmt.com/!yauheni/${id}`)
-  //     .then((response) => {
-  //       setTimeout(() => {
-  //         selectedRecipe(response.data);
-  //       }, 1000);
-  //     })
+  const recipeView = () => {
+    return (
+      <FlipInYDiv>
+        <Card style={{ width: "800px" }}>
+          <Card.Body>
+            <Container>
+              <Content>
+                <RecipePartsContainer>
+                  <img src={`${data?.img}`} alt="dish" />
+                </RecipePartsContainer>
+                <RecipePartsContainer>
+                  <div className="justify-content-center">
+                    Cooking time (min): {data?.cookingTime}
+                  </div>
+                </RecipePartsContainer>
+              </Content>
+              <Content>
+                <RecipePartsContainer>
+                  <RecipeParts>Ingredients</RecipeParts>
+                  <div>
+                    {data?.ingridients.map((ingridient) => (
+                      <Ingredient
+                        name={ingridient.name}
+                        quantity={ingridient.quantity}
+                        key={ingridient.name}
+                      />
+                    ))}
+                  </div>
+                </RecipePartsContainer>
+                <RecipePartsContainer>
+                  <RecipeParts>Method</RecipeParts>
+                  <div>{data?.recipe}</div>
+                </RecipePartsContainer>
+              </Content>
+            </Container>
+          </Card.Body>
+        </Card>
+      </FlipInYDiv>
+    );
+  };
 
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const errorView = () => {
+    return (
+      <Alert variant="danger" className="mx-auto justify-content-center mt-1">
+        <h3>Ooops! Something went wrong</h3>
+        <p></p>
+      </Alert>
+    );
+  };
 
-  // useEffect(() => {
-  //   fetchRecipeList();
+  if (isLoading) return loadingView();
+  if (error) return errorView();
 
-  //   return () => {
-  //     removeSelectedRecipe();
-  //   };
-  // }, [id]);
-
-  return (
-    <>
-      {isLoading ? (
-        <div className="d-flex">
-          <Spinner
-            animation="border"
-            variant="success"
-            className="mx-auto justify-content-center mt-1"
-          />
-        </div>
-      ) : (
-        <FlipInYDiv>
-          <Card style={{ width: "800px" }}>
-            <Card.Body>
-              <Container>
-                <Content>
-                  <RecipePartsContainer>
-                    <img src={`${data?.img}`} />
-                  </RecipePartsContainer>
-                  <RecipePartsContainer>
-                    <div className="justify-content-center">
-                      Cooking time (min): {data?.cookingTime}
-                    </div>
-                  </RecipePartsContainer>
-                </Content>
-                <Content>
-                  <RecipePartsContainer>
-                    <RecipeParts>Ingredients</RecipeParts>
-                    <div>
-                      {data?.ingridients.map((ingridient: any) => (
-                        <Ingredient
-                          name={ingridient.name}
-                          quantity={ingridient.quantity}
-                          key={ingridient.name}
-                        />
-                      ))}
-                    </div>
-                  </RecipePartsContainer>
-                  <RecipePartsContainer>
-                    <RecipeParts>Method</RecipeParts>
-                    <div>{data?.recipe}</div>
-                  </RecipePartsContainer>
-                </Content>
-              </Container>
-            </Card.Body>
-          </Card>
-        </FlipInYDiv>
-      )}
-    </>
-  );
+  return recipeView();
 };
 
 export default FullRecipe;

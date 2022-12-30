@@ -1,28 +1,17 @@
-import { recipeApi } from "./../api/apiSlice";
+import { combineReducers } from "redux";
+import { recipeApi } from "../services/RecipeService";
 import { configureStore } from "@reduxjs/toolkit";
-import reducers from "./reducers";
 
-const store = configureStore({
-  // reducer: reducers,
-  reducer: recipeApi.reducer,
+const rootReducer = combineReducers({
+  [recipeApi.reducerPath]: recipeApi.reducer,
 });
 
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(recipeApi.middleware),
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+
 export default store;
-
-// import { createStore, compose } from "redux";
-// import reducers from "./reducers";
-// import { composeWithDevTools } from "redux-devtools-extension";
-// // import thunk from "redux-thunk";
-
-// declare global {
-//   interface Window {
-//     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-//   }
-// }
-
-// const composeEnhancers =
-//   (typeof window !== "undefined" &&
-//     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-//   compose;
-
-// export const store = createStore(reducers, {}, composeEnhancers());

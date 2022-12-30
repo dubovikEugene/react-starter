@@ -13,14 +13,11 @@ interface IError {
 
 const useFetch = <T>(url: string) => {
   const [data, setData] = useState<T>();
-  // const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<IError>();
 
   useEffect(() => {
-    // setLoading(true);
-    console.log("new request");
     axios
-      .get(
+      .get<T>(
         `https://api.workstmt.com/!yauheni/${url}`
         // {
         //   headers: {
@@ -35,9 +32,6 @@ const useFetch = <T>(url: string) => {
       .catch((err) => {
         setError(err);
       });
-    // .finally(() => {
-    // setLoading(false);
-    // });
   }, [url]);
 
   return { data, error };
