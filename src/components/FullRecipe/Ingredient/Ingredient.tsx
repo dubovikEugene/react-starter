@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "@emotion/styled";
 
 interface IIngredientProps {
@@ -28,7 +28,7 @@ const Quantity = styled.div`
   font-style: italic;
 `;
 
-const IngredientComponent = ({ name, quantity }: IIngredientProps) => {
+const IngredientComponent: FC<IIngredientProps> = ({ name, quantity }) => {
   return (
     <Container>
       <Name>{name}</Name>
