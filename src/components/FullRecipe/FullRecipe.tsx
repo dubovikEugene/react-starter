@@ -34,7 +34,7 @@ const FlipInYDiv = styled.div`
 `;
 
 const FullRecipe: FC<{ id: string }> = ({ id }) => {
-  const { data, isLoading, error } = useGetRecipeByIdQuery(id);
+  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id);
 
   const loadingView = () => {
     return (
@@ -56,11 +56,11 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
             <Container>
               <Content>
                 <RecipePartsContainer>
-                  <img src={`${data?.img}`} alt="dish" />
+                  <img src={`${recipe?.img}`} alt="dish" />
                 </RecipePartsContainer>
                 <RecipePartsContainer>
                   <div className="justify-content-center">
-                    Cooking time (min): {data?.cookingTime}
+                    Cooking time (min): {recipe?.cookingTime}
                   </div>
                 </RecipePartsContainer>
               </Content>
@@ -68,7 +68,7 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
                 <RecipePartsContainer>
                   <RecipeParts>Ingredients</RecipeParts>
                   <div>
-                    {data?.ingridients.map((ingridient) => (
+                    {recipe?.ingridients.map((ingridient) => (
                       <Ingredient
                         name={ingridient.name}
                         quantity={ingridient.quantity}
@@ -79,7 +79,7 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
                 </RecipePartsContainer>
                 <RecipePartsContainer>
                   <RecipeParts>Method</RecipeParts>
-                  <div>{data?.recipe}</div>
+                  <div>{recipe?.recipe}</div>
                 </RecipePartsContainer>
               </Content>
             </Container>
@@ -92,7 +92,7 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
   const errorView = () => {
     return (
       <Alert variant="danger" className="mx-auto justify-content-center mt-1">
-        <h3>Ooops! Something went wrong</h3>
+        <h3>Error loading a recipe</h3>
         <p></p>
       </Alert>
     );

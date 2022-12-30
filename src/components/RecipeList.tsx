@@ -7,7 +7,7 @@ import FullRecipe from "./FullRecipe/FullRecipe";
 import { useGetAllRecipesQuery } from "../services/RecipeService";
 
 const RecipeList: React.FC = () => {
-  const { data, error, isLoading } = useGetAllRecipesQuery();
+  const { data: recipes, error, isLoading } = useGetAllRecipesQuery();
 
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ const RecipeList: React.FC = () => {
   const errorView = () => {
     return (
       <Alert variant="danger" className="mx-auto justify-content-center mt-5">
-        <h3>Ooops! Something went wrong</h3>
+        <h3>Error loading the recipe list</h3>
       </Alert>
     );
   };
@@ -38,7 +38,7 @@ const RecipeList: React.FC = () => {
   const recipesView = () => {
     return (
       <ListGroup className="w-100 mx-auto justify-content-center mt-4">
-        {data?.recipes.map((recipe) => (
+        {recipes?.recipes.map((recipe) => (
           <div key={recipe.id}>
             <ListGroup.Item
               role="button"
