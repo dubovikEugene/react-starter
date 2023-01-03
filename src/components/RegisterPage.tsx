@@ -15,23 +15,57 @@ const Container = styled.div`
 `;
 
 const RegisterPage = () => {
-  const email = useInput({ initialValue: "" });
-  const password = useInput({ initialValue: "" });
-  const userName = useInput({ initialValue: "" });
+  const email = useInput({
+    initialValue: "",
+    validations: { isEmail: true, isEmpty: true },
+  });
+  const password = useInput({
+    initialValue: "",
+    validations: { minLength: 4, maxLength: 32, isEmpty: true },
+  });
+  const userName = useInput({ initialValue: "", validations: {} });
 
   const handleRegister = (e: React.MouseEvent) => {
     console.log("click");
   };
 
+  const errorMessageDiv = (error: string) => {
+    return <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>;
+  };
+  const emailErrorsRender = () => {
+    return email.isDirty && email.valid.isEmpty ? (
+      errorMessageDiv("Email can't be empty")
+    ) : email.isDirty && email.valid.emailError ? (
+      errorMessageDiv(email.valid.emailError)
+    ) : (
+      <></>
+    );
+  };
+  const passwordErrorsRender = () => {
+    if (password.isDirty) {
+      if (password.valid.isEmpty) {
+        return errorMessageDiv("Password can't be empty");
+      }
+      if (password.valid.minLengthError) {
+        return errorMessageDiv("Password" + password.valid.minLengthError);
+      }
+      if (password.valid.maxLengthError) {
+        return errorMessageDiv("Password" + password.valid.maxLengthError);
+      }
+    }
+  };
+
   return (
     <Container>
       <Form titleText="Register here">
+        {emailErrorsRender()}
         <Input
           type="email"
           name="email"
           placeholder="Email"
           value={email.value}
           onChange={email.onChange}
+          onBlur={email.onBlur}
           id="email"
           labelText="Email"
         />
@@ -41,15 +75,18 @@ const RegisterPage = () => {
           placeholder="User name"
           value={userName.value}
           onChange={userName.onChange}
+          onBlur={userName.onBlur}
           id="user_name"
           labelText="User name"
         />
+        {passwordErrorsRender()}
         <Input
           type="password"
           name="password"
           placeholder="Password"
           value={password.value}
           onChange={password.onChange}
+          onBlur={password.onBlur}
           id="password"
           labelText="Password"
         />
