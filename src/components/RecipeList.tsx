@@ -37,30 +37,33 @@ const RecipeList: React.FC = () => {
 
   const recipesView = () => {
     return (
-      <ListGroup className="w-100 mx-auto justify-content-center mt-4">
-        {recipes?.recipes.map((recipe) => (
-          <div key={recipe.id}>
-            <ListGroup.Item
-              role="button"
-              className={`p-3 ${active === recipe.id && "active"}`}
-              aria-controls="example-collapse-text"
-              aria-expanded={open}
-              onClick={() => {
-                toggleState(recipe.id);
-              }}
-            >
-              <div className="text-center">{recipe.name}</div>
-            </ListGroup.Item>
-            <div style={{ minHeight: "0px", marginTop: "5px" }}>
-              <Collapse in={active === recipe.id} dimension="width">
-                <div id="example-collapse-text">
-                  {active === recipe.id && <FullRecipe id={active} />}
-                </div>
-              </Collapse>
+      <div className="d-flex flex-column align-aitems-center mb-5 mt-5">
+        <h1 className="mt-5 text-center">Recipe List</h1>
+        <ListGroup className="w-100 mx-auto justify-content-center mt-4">
+          {recipes?.recipes.map((recipe) => (
+            <div key={recipe.id}>
+              <ListGroup.Item
+                role="button"
+                className={`p-3 ${active === recipe.id && "active"}`}
+                aria-controls="example-collapse-text"
+                aria-expanded={open}
+                onClick={() => {
+                  toggleState(recipe.id);
+                }}
+              >
+                <div className="text-center">{recipe.name}</div>
+              </ListGroup.Item>
+              <div style={{ minHeight: "0px", marginTop: "5px" }}>
+                <Collapse in={active === recipe.id} dimension="width">
+                  <div id="example-collapse-text">
+                    {active === recipe.id && <FullRecipe id={active} />}
+                  </div>
+                </Collapse>
+              </div>
             </div>
-          </div>
-        ))}
-      </ListGroup>
+          ))}
+        </ListGroup>
+      </div>
     );
   };
 

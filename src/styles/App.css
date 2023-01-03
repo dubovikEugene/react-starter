@@ -10,11 +10,12 @@
 }
 
 .App {
-  width: 800px;
+  margin-top: 2rem;
+  min-width: 50rem;
 }
 
 img {
-  width: 150px;
+  width: 9rem;
 }
 
 .collapsing {

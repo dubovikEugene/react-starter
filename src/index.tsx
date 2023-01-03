@@ -7,6 +7,7 @@ import { Provider } from "react-redux/es/exports";
 import store from "./redux/store";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { recipeApi } from "./services/RecipeService";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,9 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ApiProvider api={recipeApi}>
+      <BrowserRouter>
         <App />
-      </ApiProvider>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
