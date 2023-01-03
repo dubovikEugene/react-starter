@@ -23,19 +23,20 @@ const RegisterPage = () => {
     initialValue: "",
     validations: { minLength: 4, maxLength: 32, isEmpty: true },
   });
-  const userName = useInput({ initialValue: "", validations: {} });
+  const userName = useInput({
+    initialValue: "",
+    validations: { isEmpty: false },
+  });
 
   const isAllInputValid = () => {
     return (
-      email.valid.isValidInput ||
-      password.valid.isValidInput ||
-      userName.valid.isValidInput
+      !email.valid.isValidInput ||
+      !password.valid.isValidInput ||
+      !userName.valid.isValidInput
     );
   };
 
-  const handleRegister = (e: React.MouseEvent) => {
-    console.log("click");
-  };
+  const handleRegister = (e: React.MouseEvent) => {};
 
   const errorMessageDiv = (error: string) => {
     return <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>;
@@ -99,7 +100,7 @@ const RegisterPage = () => {
           labelText="Password"
         />
 
-        <Button disabled={!isAllInputValid()} onClick={handleRegister}>
+        <Button disabled={isAllInputValid()} onClick={handleRegister}>
           Register
         </Button>
       </Form>

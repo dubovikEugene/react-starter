@@ -12,7 +12,6 @@ export const useValidation = (value: string, validations: IValidation) => {
     for (const validation in validations) {
       switch (validation) {
         case "isEmpty":
-          console.log(value);
           value ? setIsEmpty(false) : setIsEmpty(true);
           break;
         case "isEmail":
