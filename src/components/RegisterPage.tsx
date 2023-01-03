@@ -25,6 +25,14 @@ const RegisterPage = () => {
   });
   const userName = useInput({ initialValue: "", validations: {} });
 
+  const isAllInputValid = () => {
+    return (
+      email.valid.isValidInput ||
+      password.valid.isValidInput ||
+      userName.valid.isValidInput
+    );
+  };
+
   const handleRegister = (e: React.MouseEvent) => {
     console.log("click");
   };
@@ -91,7 +99,9 @@ const RegisterPage = () => {
           labelText="Password"
         />
 
-        <Button onClick={handleRegister}>Register</Button>
+        <Button disabled={!isAllInputValid()} onClick={handleRegister}>
+          Register
+        </Button>
       </Form>
       <CreateOrLoginComponent
         message="Have an account?"

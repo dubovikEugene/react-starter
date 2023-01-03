@@ -6,6 +6,7 @@ export const useValidation = (value: string, validations: IValidation) => {
   const [minLengthError, setMinLengthError] = useState<string>("");
   const [maxLengthError, setMaxLengthError] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
+  const [isValidInput, setIsValidInput] = useState<boolean>(false);
 
   useEffect(() => {
     for (const validation in validations) {
@@ -39,5 +40,13 @@ export const useValidation = (value: string, validations: IValidation) => {
     }
   }, [value]);
 
-  return { isEmpty, minLengthError, emailError, maxLengthError };
+  useEffect(() => {
+    if (isEmpty || minLengthError || emailError || maxLengthError) {
+      setIsValidInput(false);
+    } else {
+      setIsValidInput(true);
+    }
+  }, [isEmpty, minLengthError, emailError, maxLengthError]);
+
+  return { isEmpty, minLengthError, emailError, maxLengthError, isValidInput };
 };
