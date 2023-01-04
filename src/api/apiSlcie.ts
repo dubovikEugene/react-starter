@@ -7,8 +7,8 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { AuthResponse } from "../models/response/AuthResponse";
 import { setCredentials, logOut } from "../redux/authSlice";
+import { AuthResponse } from "../models/response/AuthResponse";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://ustka.travel/",
@@ -42,15 +42,17 @@ const baseQueryWithReauth: BaseQueryFn<
       api,
       extraOptions
     );
-    console.log("refresh token --> " + refreshResult?.data);
+
     if (refreshResult?.data) {
-      const newToken = (api.getState() as RootState).auth.refresh_token;
-      const newToken1 = refreshResult.data;
-      console.log("set token --> " + newToken1);
-      // localStorage.setItem("token", newToken);
-      api.dispatch(setCredentials({ ...refreshResult.data, newToken }));
+      const newCredentials: AuthResponse = {
+        token: `${refreshResult.data}`,
+        refresh_token: (api.getState() as RootState).auth.refresh_token,
+        user: (api.getState() as RootState).auth.user,
+      };
+      api.dispatch(setCredentials(newCredentials));
       result = await baseQuery(args, api, extraOptions);
     } else {
+      console.log("logout");
       api.dispatch(logOut());
     }
   }

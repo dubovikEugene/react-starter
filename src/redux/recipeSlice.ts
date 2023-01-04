@@ -1,8 +1,8 @@
 import { IRecipeList } from "./../models/IRecipeList";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: any = {
-  // recipes: [{ id: "", name: "" }],
+const initialState: IRecipeList = {
+  recipes: [{ id: "", name: "" }],
 };
 
 const recipeSlice = createSlice({

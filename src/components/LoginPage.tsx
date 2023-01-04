@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { setCredentials } from "../redux/authSlice";
@@ -29,6 +30,7 @@ const LoginPage = () => {
   const [dirtyPassword, setDirtyPassword] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (emailError || passwordError) {
@@ -44,7 +46,7 @@ const LoginPage = () => {
     password: "",
   };
 
-  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -92,12 +94,9 @@ const LoginPage = () => {
     request.action = "signin";
     request.email = email;
     request.password = password;
-    console.log(request);
-    try {
-      const response = await loginUser(request).unwrap();
-      dispatch(setCredentials({ ...response }));
-      console.log(response);
-    } catch (error) {}
+    const response = await loginUser(request).unwrap();
+    dispatch(setCredentials(response));
+    navigate("/recipes");
   };
 
   const errorRender = (error: string) => {

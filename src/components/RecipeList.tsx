@@ -11,18 +11,10 @@ const RecipeList: React.FC = () => {
     useGetAllRecipesMutation();
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await getAllRecipes({
-          action: "get_file",
-          fileName: "base.json",
-        }).unwrap();
-        return response;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchRecipes();
+    getAllRecipes({
+      action: "get_file",
+      fileName: "base.json",
+    }).unwrap();
   }, []);
 
   const [active, setActive] = useState<string>("");
