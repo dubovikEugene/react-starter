@@ -81,21 +81,8 @@ const RegisterPage = () => {
     request.password = password.value;
     request.userName = userName.value;
     console.log(request);
-    const response = await registerUser(request);
+    const response = await registerUser(request).unwrap();
     console.log(response);
-    // const register = () =>
-    //   fetch("https://ustka.travel/api/signform.php", {
-    //     method: "POST",
-    //     body: JSON.stringify(request),
-    //   })
-    //     .then((r) => r.json())
-    //     .then((r) => {
-    //       console.log("got response", r);
-    //     })
-    //     .catch((r) => {
-    //       console.log("ERROR", r);
-    //     });
-    // register();
   };
 
   return (

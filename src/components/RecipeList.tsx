@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Spinner from "react-bootstrap/Spinner";
 import Collapse from "react-bootstrap/Collapse";
 import Alert from "react-bootstrap/Alert";
 import FullRecipe from "./FullRecipe/FullRecipe";
-import { useGetAllRecipesQuery } from "../services/RecipeService";
+import { useGetAllRecipesMutation } from "../services/RecipeService";
 
 const RecipeList: React.FC = () => {
-  const { data: recipes, error, isLoading } = useGetAllRecipesQuery();
+  const [getAllRecipes, { data: recipes, isLoading, isError }] =
+    useGetAllRecipesMutation();
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await getAllRecipes({
+          action: "get_file",
+          fileName: "base.json",
+        }).unwrap();
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -67,7 +83,7 @@ const RecipeList: React.FC = () => {
     );
   };
 
-  if (error) return errorView();
+  if (isError) return errorView();
   if (isLoading) return loadingView();
 
   return recipesView();

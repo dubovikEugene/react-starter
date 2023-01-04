@@ -17,7 +17,7 @@ const authSlice = createSlice({
       state.token = token;
       state.refresh_token = refresh_token;
     },
-    logOut: (state, action) => {
+    logOut: (state) => {
       state.user = { details: "", email: "" };
       state.token = "";
       state.refresh_token = "";

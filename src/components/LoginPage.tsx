@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { AuthRequest } from "../models/request/AuthRequest";
-import { AuthResponse } from "../models/response/AuthResponse";
+import { setCredentials } from "../redux/authSlice";
 import { useLoginUserMutation } from "../services/AuthService";
 import Button from "./UI/Button";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
@@ -29,6 +28,8 @@ const LoginPage = () => {
   const [dirtyEmail, setDirtyEmail] = useState(false);
   const [dirtyPassword, setDirtyPassword] = useState(false);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (emailError || passwordError) {
       setFormIsValid(false);
@@ -43,7 +44,7 @@ const LoginPage = () => {
     password: "",
   };
 
-  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -85,28 +86,18 @@ const LoginPage = () => {
     }
   };
 
-  const handleLogin = (e: React.MouseEvent) => {
+  const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
     console.log("click");
     request.action = "signin";
     request.email = email;
     request.password = password;
     console.log(request);
-    // const response = await loginUser(request);
-    // console.log(response);
-    const login = async () => {
-      await fetch(`https://ustka.travel/api/signform.php`, {
-        method: "POST",
-        body: JSON.stringify(request),
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    login();
+    try {
+      const response = await loginUser(request).unwrap();
+      dispatch(setCredentials({ ...response }));
+      console.log(response);
+    } catch (error) {}
   };
 
   const errorRender = (error: string) => {
