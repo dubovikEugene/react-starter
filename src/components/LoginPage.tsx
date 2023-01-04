@@ -94,24 +94,19 @@ const LoginPage = () => {
     console.log(request);
     // const response = await loginUser(request);
     // console.log(response);
-    // const asd = () => {
-    //   fetch(`https://api.workstmt.com/!yauheni/api/signform`, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       action: "register",
-    //       email: "abcd@asdaa.pl",
-    //       password: "123",
-    //       userName: "abcd asd",
-    //     }),
-    //   })
-    //     .then((response) => {
-    //       console.log(response);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // };
-    // asd();
+    const login = async () => {
+      await fetch(`https://ustka.travel/api/signform.php`, {
+        method: "POST",
+        body: JSON.stringify(request),
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    login();
   };
 
   const errorRender = (error: string) => {

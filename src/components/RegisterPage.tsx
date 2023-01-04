@@ -5,6 +5,8 @@ import Form from "./UI/Form";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
 import { useInput } from "../hooks/useInput.hook";
+import { AuthRequest } from "../models/request/AuthRequest";
+import { useRegisterUserMutation } from "../services/AuthService";
 
 const Container = styled.div`
   margin-top: 5rem;
@@ -28,6 +30,15 @@ const RegisterPage = () => {
     validations: { isEmpty: false },
   });
 
+  const [registerUser] = useRegisterUserMutation();
+
+  const request: AuthRequest = {
+    action: "",
+    email: "",
+    password: "",
+    userName: "",
+  };
+
   const isAllInputValid = () => {
     return (
       !email.valid.isValidInput ||
@@ -35,8 +46,6 @@ const RegisterPage = () => {
       !userName.valid.isValidInput
     );
   };
-
-  const handleRegister = (e: React.MouseEvent) => {};
 
   const errorMessageDiv = (error: string) => {
     return <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>;
@@ -62,6 +71,31 @@ const RegisterPage = () => {
         return errorMessageDiv("Password" + password.valid.maxLengthError);
       }
     }
+  };
+
+  const handleRegister = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("click");
+    request.action = "register";
+    request.email = email.value;
+    request.password = password.value;
+    request.userName = userName.value;
+    console.log(request);
+    const response = await registerUser(request);
+    console.log(response);
+    // const register = () =>
+    //   fetch("https://ustka.travel/api/signform.php", {
+    //     method: "POST",
+    //     body: JSON.stringify(request),
+    //   })
+    //     .then((r) => r.json())
+    //     .then((r) => {
+    //       console.log("got response", r);
+    //     })
+    //     .catch((r) => {
+    //       console.log("ERROR", r);
+    //     });
+    // register();
   };
 
   return (

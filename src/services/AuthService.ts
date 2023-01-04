@@ -40,8 +40,10 @@ import { setCredentials, logOut } from "../redux/authSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
+
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.workstmt.com/!yauheni/",
+    baseUrl: "https://ustka.travel/",
+    // mode: "cors",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
@@ -53,14 +55,14 @@ export const authApi = createApi({
   endpoints: (builder) => ({
     registerUser: builder.mutation<AuthResponse, AuthRequest>({
       query: (body: AuthRequest) => ({
-        url: "api/signform",
+        url: "api/signform.php",
         method: "POST",
         body: body,
       }),
     }),
     loginUser: builder.mutation<AuthResponse, AuthRequest>({
       query: (body: AuthRequest) => ({
-        url: "api/signform",
+        url: "api/signform.php",
         method: "POST",
         body: body,
       }),
