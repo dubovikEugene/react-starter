@@ -1,14 +1,5 @@
-import { RootState } from "./../redux/store";
 import { AuthRequest } from "./../models/request/AuthRequest";
-import {
-  BaseQueryFn,
-  createApi,
-  FetchArgs,
-  fetchBaseQuery,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
 import { AuthResponse } from "../models/response/AuthResponse";
-import { setCredentials, logOut } from "../redux/authSlice";
 import { apiSlice } from "../api/apiSlcie";
 
 export const authApiSlice = apiSlice.injectEndpoints({
