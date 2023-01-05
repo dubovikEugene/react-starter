@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Spinner from "react-bootstrap/Spinner";
 import Collapse from "react-bootstrap/Collapse";
 import Alert from "react-bootstrap/Alert";
 import FullRecipe from "./FullRecipe/FullRecipe";
-import { useGetAllRecipesQuery } from "../services/RecipeService";
+import { useGetAllRecipesMutation } from "../services/RecipeService";
 
 const RecipeList: React.FC = () => {
-  const { data: recipes, error, isLoading } = useGetAllRecipesQuery();
+  const [getAllRecipes, { data: recipes, isLoading, isError }] =
+    useGetAllRecipesMutation();
+
+  useEffect(() => {
+    getAllRecipes({
+      action: "get_file",
+      fileName: "base.json",
+    }).unwrap();
+  }, []);
 
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -37,34 +45,37 @@ const RecipeList: React.FC = () => {
 
   const recipesView = () => {
     return (
-      <ListGroup className="w-100 mx-auto justify-content-center mt-4">
-        {recipes?.recipes.map((recipe) => (
-          <div key={recipe.id}>
-            <ListGroup.Item
-              role="button"
-              className={`p-3 ${active === recipe.id && "active"}`}
-              aria-controls="example-collapse-text"
-              aria-expanded={open}
-              onClick={() => {
-                toggleState(recipe.id);
-              }}
-            >
-              <div className="text-center">{recipe.name}</div>
-            </ListGroup.Item>
-            <div style={{ minHeight: "0px", marginTop: "5px" }}>
-              <Collapse in={active === recipe.id} dimension="width">
-                <div id="example-collapse-text">
-                  {active === recipe.id && <FullRecipe id={active} />}
-                </div>
-              </Collapse>
+      <div className="d-flex flex-column align-aitems-center mb-5 mt-5">
+        <h1 className="mt-5 text-center">Recipe List</h1>
+        <ListGroup className="w-100 mx-auto justify-content-center mt-4">
+          {recipes?.recipes.map((recipe) => (
+            <div key={recipe.id}>
+              <ListGroup.Item
+                role="button"
+                className={`p-3 ${active === recipe.id && "active"}`}
+                aria-controls="example-collapse-text"
+                aria-expanded={open}
+                onClick={() => {
+                  toggleState(recipe.id);
+                }}
+              >
+                <div className="text-center">{recipe.name}</div>
+              </ListGroup.Item>
+              <div style={{ minHeight: "0px", marginTop: "5px" }}>
+                <Collapse in={active === recipe.id} dimension="width">
+                  <div id="example-collapse-text">
+                    {active === recipe.id && <FullRecipe id={active} />}
+                  </div>
+                </Collapse>
+              </div>
             </div>
-          </div>
-        ))}
-      </ListGroup>
+          ))}
+        </ListGroup>
+      </div>
     );
   };
 
-  if (error) return errorView();
+  if (isError) return errorView();
   if (isLoading) return loadingView();
 
   return recipesView();
