@@ -11,10 +11,7 @@ const RecipeList: React.FC = () => {
     useGetAllRecipesMutation();
 
   useEffect(() => {
-    getAllRecipes({
-      action: "get_file",
-      fileName: "base.json",
-    }).unwrap();
+    getAllRecipes().unwrap();
   }, []);
 
   const [active, setActive] = useState<string>("");
@@ -30,7 +27,7 @@ const RecipeList: React.FC = () => {
       <Spinner
         animation="border"
         variant="success"
-        className="mx-auto justify-content-center mt-5"
+        className="mx-auto d-flex justify-content-center mt-5"
       />
     );
   };

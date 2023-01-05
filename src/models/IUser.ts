@@ -1,5 +1,3 @@
 export interface IUser {
-  details: string;
-  email: string;
-  userKey: string;
+  details: { email: string; userKey: string };
 }

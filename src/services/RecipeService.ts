@@ -1,41 +1,31 @@
 import { apiSlice } from "./../api/apiSlcie";
 import { IFullRecipe } from "../models/IFullRecipe";
 import { IRecipeList } from "../models/IRecipeList";
-import { RecipesRequest } from "../models/request/REcipesRequest";
 
 export const recipeApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllRecipes: builder.mutation<IRecipeList, RecipesRequest>({
-      query: (body: RecipesRequest) => ({
+    getAllRecipes: builder.mutation<IRecipeList, void>({
+      query: () => ({
         url: "api/files2.php",
         method: "POST",
-        body: JSON.stringify(body),
+        body: {
+          action: "get_file",
+          fileName: "base.json",
+        },
       }),
     }),
-    getRecipeById: builder.query<IFullRecipe, string>({
+    getRecipeById: builder.mutation<IFullRecipe, string>({
       query: (id) => ({
-        url: `api/${id}`,
+        url: "api/files2.php",
+        method: "POST",
+        body: {
+          action: "get_file",
+          fileName: `${id}.json`,
+        },
       }),
     }),
   }),
 });
 
-// createApi({
-//   reducerPath: "recipeApi",
-//   baseQuery: fetchBaseQuery({ baseUrl: "https://api.workstmt.com/!yauheni/" }),
-//   endpoints: (builder) => ({
-//     getAllRecipes: builder.query<IRecipeList, void>({
-//       query: () => ({
-//         url: "base.json",
-//       }),
-//     }),
-//     getRecipeById: builder.query<IFullRecipe, string>({
-//       query: (id) => ({
-//         url: `${id}`,
-//       }),
-//     }),
-//   }),
-// });
-
-export const { useGetAllRecipesMutation, useGetRecipeByIdQuery } =
+export const { useGetAllRecipesMutation, useGetRecipeByIdMutation } =
   recipeApiSlice;

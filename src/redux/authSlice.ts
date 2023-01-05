@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: AuthResponse = {
   token: "",
   refresh_token: "",
-  user: { userKey: "", details: "", email: "" },
+  user: { details: { userKey: "", email: "" } },
 };
 
 const authSlice = createSlice({
@@ -18,7 +18,7 @@ const authSlice = createSlice({
       state.refresh_token = refresh_token;
     },
     logOut: (state) => {
-      state.user = { userKey: "", details: "", email: "" };
+      state.user = { details: { userKey: "", email: "" } };
       state.token = "";
       state.refresh_token = "";
     },
