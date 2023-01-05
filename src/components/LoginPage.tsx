@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Spinner } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { setCredentials } from "../redux/authSlice";
 import { useLoginUserMutation } from "../services/AuthService";
@@ -19,26 +21,18 @@ const Container = styled.div`
 `;
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("Email cant't be empty");
-  const [passwordError, setPasswordError] = useState(
-    "Password cant't be empty"
-  );
-  const [formIsValid, setFormIsValid] = useState(false);
-  const [dirtyEmail, setDirtyEmail] = useState(false);
-  const [dirtyPassword, setDirtyPassword] = useState(false);
+  const email = useInput({
+    initialValue: "",
+    validations: { isEmail: true, isEmpty: true },
+  });
+
+  const password = useInput({
+    initialValue: "",
+    validations: { minLength: 6, maxLength: 32, isEmpty: true },
+  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (emailError || passwordError) {
-      setFormIsValid(false);
-    } else {
-      setFormIsValid(true);
-    }
-  }, [emailError, passwordError]);
 
   const request: AuthRequest = {
     action: "",
@@ -48,90 +42,110 @@ const LoginPage = () => {
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
-  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    const re =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-    if (!re.test(String(e.target.value).toLocaleLowerCase())) {
-      setEmailError("Incorrect email");
-    } else {
-      setEmailError("");
-    }
-    if (!e.target.value) {
-      setEmailError("Email cant't be empty");
-    }
-  };
-
-  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (e.target.value.length < 4 || e.target.value.length > 32) {
-      setPasswordError(
-        "Password can't be less than 4 characters or more than 32 characters"
-      );
-      if (e.target.value.length === 0) {
-        setPasswordError("Password cant't be empty");
-      }
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  const blurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
-    switch (e.target.name) {
-      case "email":
-        setDirtyEmail(true);
-        break;
-      case "password":
-        setDirtyPassword(true);
-        break;
-    }
-  };
-
   const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("click");
     request.action = "signin";
-    request.email = email;
-    request.password = password;
+    request.email = email.value;
+    request.password = password.value;
     const response = await loginUser(request).unwrap();
     dispatch(setCredentials(response));
     navigate("/recipes");
   };
 
-  const errorRender = (error: string) => {
+  const isAllInputValid = () => {
+    return !email.valid.isValidInput || !password.valid.isValidInput;
+  };
+
+  const errorMessageDiv = (error: string) => {
     return <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>;
+  };
+
+  const errorMessageHandler = () => {
+    if (error) {
+      if ("status" in error) {
+        if ("data" in error) {
+          const errorMsgFromJSON =
+            "error" in error ? error.error : JSON.stringify(error.data);
+          const messeges = errorMsgFromJSON.split(":");
+          const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
+          return errorMsg;
+        }
+      }
+    }
+    return "";
+  };
+
+  const emailErrorsRender = () => {
+    return email.isDirty && email.valid.isEmpty ? (
+      errorMessageDiv("Email can't be empty")
+    ) : email.isDirty && email.valid.emailError ? (
+      errorMessageDiv(email.valid.emailError)
+    ) : (
+      <></>
+    );
+  };
+  const passwordErrorsRender = () => {
+    if (password.isDirty) {
+      if (password.valid.isEmpty) {
+        return errorMessageDiv("Password can't be empty");
+      }
+      if (password.valid.minLengthError) {
+        return errorMessageDiv("Password" + password.valid.minLengthError);
+      }
+      if (password.valid.maxLengthError) {
+        return errorMessageDiv("Password" + password.valid.maxLengthError);
+      }
+    }
+  };
+
+  const loadingView = () => {
+    return (
+      <Spinner
+        animation="border"
+        variant="dark"
+        className="mx-auto d-flex justify-content-center mt-2 mb-1"
+        size="sm"
+      />
+    );
   };
 
   return (
     <Container>
       <Form titleText="Login here">
-        {dirtyEmail && emailError && errorRender(emailError)}
+        {emailErrorsRender()}
         <Input
           type="email"
           name="email"
           placeholder="Email"
-          value={email}
-          onChange={emailHandler}
-          onBlur={blurHandler}
+          value={email.value}
+          onChange={email.onChange}
+          onBlur={email.onBlur}
           id="email"
           labelText="Email"
         />
-        {dirtyPassword && passwordError && errorRender(passwordError)}
+        {passwordErrorsRender()}
         <Input
           type="password"
           name="password"
           placeholder="Password"
-          value={password}
-          onChange={passwordHandler}
-          onBlur={blurHandler}
+          value={password.value}
+          onChange={password.onChange}
+          onBlur={password.onBlur}
           id="password"
           labelText="Password"
         />
-        <Button disabled={!formIsValid} onClick={handleLogin}>
-          Login
-        </Button>
+        {error && errorMessageDiv(errorMessageHandler())}
+        {isLoading ? (
+          <Button disabled={isAllInputValid()} onClick={() => {}}>
+            {loadingView()}
+          </Button>
+        ) : (
+          <Button disabled={isAllInputValid()} onClick={handleLogin}>
+            Login
+          </Button>
+        )}
       </Form>
+
       <CreateOrLoginComponent
         message="Don't have account?"
         linkName=" Create account"

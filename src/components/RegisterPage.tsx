@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
 import Form from "./UI/Form";
@@ -7,6 +7,10 @@ import Button from "./UI/Button";
 import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { useRegisterUserMutation } from "../services/AuthService";
+import { Spinner } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setCredentials } from "../redux/authSlice";
 
 const Container = styled.div`
   margin-top: 5rem;
@@ -23,14 +27,17 @@ const RegisterPage = () => {
   });
   const password = useInput({
     initialValue: "",
-    validations: { minLength: 4, maxLength: 32, isEmpty: true },
+    validations: { minLength: 6, maxLength: 32, isEmpty: true },
   });
   const userName = useInput({
     initialValue: "",
     validations: { isEmpty: false },
   });
 
-  const [registerUser] = useRegisterUserMutation();
+  const [registerUser, { isLoading, error }] = useRegisterUserMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const request: AuthRequest = {
     action: "",
@@ -73,16 +80,41 @@ const RegisterPage = () => {
     }
   };
 
+  const errorMessageHandler = () => {
+    if (error) {
+      if ("status" in error) {
+        if ("data" in error) {
+          const errorMsgFromJSON =
+            "error" in error ? error.error : JSON.stringify(error.data);
+          const messeges = errorMsgFromJSON.split(":");
+          const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
+          return errorMsg;
+        }
+      }
+    }
+    return "";
+  };
+
   const handleRegister = async (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("click");
     request.action = "register";
     request.email = email.value;
     request.password = password.value;
     request.userName = userName.value;
     console.log(request);
     const response = await registerUser(request).unwrap();
-    console.log(response);
+    dispatch(setCredentials(response));
+    navigate("/recipes");
+  };
+  const loadingView = () => {
+    return (
+      <Spinner
+        animation="border"
+        variant="dark"
+        className="mx-auto d-flex justify-content-center mt-2 mb-1"
+        size="sm"
+      />
+    );
   };
 
   return (
@@ -120,10 +152,16 @@ const RegisterPage = () => {
           id="password"
           labelText="Password"
         />
-
-        <Button disabled={isAllInputValid()} onClick={handleRegister}>
-          Register
-        </Button>
+        {error && errorMessageDiv(errorMessageHandler())}
+        {isLoading ? (
+          <Button disabled={isAllInputValid()} onClick={() => {}}>
+            {loadingView()}
+          </Button>
+        ) : (
+          <Button disabled={isAllInputValid()} onClick={handleRegister}>
+            Register
+          </Button>
+        )}
       </Form>
       <CreateOrLoginComponent
         message="Have an account?"

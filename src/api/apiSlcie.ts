@@ -1,5 +1,4 @@
 import { RootState } from "./../redux/store";
-import { AuthRequest } from "./../models/request/AuthRequest";
 import {
   BaseQueryFn,
   createApi,

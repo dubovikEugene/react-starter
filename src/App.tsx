@@ -3,7 +3,7 @@ import "./styles/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RecipeList from "./components/RecipeList";
 import NavBar from "./components/NavBar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 
