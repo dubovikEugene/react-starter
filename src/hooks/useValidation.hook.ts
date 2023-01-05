@@ -1,5 +1,5 @@
 import { IValidation } from "./../models/IValidation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useValidation = (value: string, validations: IValidation) => {
   const [isEmpty, setIsEmpty] = useState<boolean>(validations?.isEmpty || true);
@@ -37,7 +37,7 @@ export const useValidation = (value: string, validations: IValidation) => {
           break;
       }
     }
-  }, [value]);
+  }, [value, validations]);
 
   useEffect(() => {
     if (isEmpty || minLengthError || emailError || maxLengthError) {

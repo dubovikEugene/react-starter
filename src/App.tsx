@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import "./styles/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RecipeList from "./components/RecipeList";
@@ -7,13 +7,11 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import store, { RootState } from "./redux/store";
+import { RootState } from "./redux/store";
 import ErrorPage from "./components/ErrorPage";
 import { useSelector } from "react-redux";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
-
   const userKey = useSelector((state: RootState) => {
     return state.auth.user.details.userKey;
   });

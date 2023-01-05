@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import store, { RootState } from "../redux/store";
+import { logOut } from "../redux/authSlice";
+import { RootState } from "../redux/store";
 
 const StyledUl = styled.ul`
   display: flex;
@@ -46,43 +47,57 @@ const StyledLi = styled.li`
   }
 `;
 
-const renderPublickNavBar = () => {
-  return (
-    <>
-      <StyledUl>
-        <StyledLi>
-          <Link to="/login" className="link">
-            Login
-          </Link>
-        </StyledLi>
-        <StyledLi>
-          <Link to="/register" className="link">
-            Register
-          </Link>
-        </StyledLi>
-      </StyledUl>
-    </>
-  );
-};
-
-const renderPrivateNavBar = () => {
-  return (
-    <>
-      <StyledUl>
-        <StyledLi>
-          <Link to="/recipes" className="link">
-            Recipes
-          </Link>
-        </StyledLi>
-        <StyledLi>
-          <div className="logout">Logout</div>
-        </StyledLi>
-      </StyledUl>
-    </>
-  );
-};
-
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = (e: React.MouseEvent) => {
+    dispatch(logOut());
+    navigate("/login");
+  };
+
+  const renderPublickNavBar = () => {
+    return (
+      <>
+        <StyledUl>
+          <StyledLi>
+            <Link to="/login" className="link">
+              Login
+            </Link>
+          </StyledLi>
+          <StyledLi>
+            <Link to="/register" className="link">
+              Register
+            </Link>
+          </StyledLi>
+        </StyledUl>
+      </>
+    );
+  };
+
+  const renderPrivateNavBar = () => {
+    return (
+      <>
+        <StyledUl>
+          <StyledLi>
+            <Link to="/recipes" className="link">
+              Recipes
+            </Link>
+          </StyledLi>
+          <StyledLi>
+            <div
+              className="logout"
+              onClick={(e) => {
+                logoutHandler(e);
+              }}
+            >
+              Logout
+            </div>
+          </StyledLi>
+        </StyledUl>
+      </>
+    );
+  };
   const userKey = useSelector((state: RootState) => {
     return state.auth.user.details.userKey;
   });
