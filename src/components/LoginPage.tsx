@@ -35,7 +35,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const request: AuthRequest = {
-    action: "",
     email: "",
     password: "",
   };
@@ -44,7 +43,6 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
-    request.action = "signin";
     request.email = email.value;
     request.password = password.value;
     const response = await loginUser(request).unwrap();

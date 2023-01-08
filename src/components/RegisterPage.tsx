@@ -40,7 +40,6 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const request: AuthRequest = {
-    action: "",
     email: "",
     password: "",
     userName: "",
@@ -97,7 +96,6 @@ const RegisterPage = () => {
 
   const handleRegister = async (e: React.MouseEvent) => {
     e.preventDefault();
-    request.action = "register";
     request.email = email.value;
     request.password = password.value;
     request.userName = userName.value;

@@ -1,10 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import Ingredient from "./Ingredient/Ingredient";
 import Card from "react-bootstrap/Card";
 import styled, { keyframes } from "styled-components";
 import { Alert, Spinner } from "react-bootstrap";
 import { flipInY } from "react-animations";
-import { useGetRecipeByIdQuery } from "../../services/RecipeService";
+import { useGetRecipeByIdMutation } from "../../services/RecipeService";
 
 const Container = styled.div`
   justify-content: center;
@@ -34,7 +34,12 @@ const FlipInYDiv = styled.div`
 `;
 
 const FullRecipe: FC<{ id: string }> = ({ id }) => {
-  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id);
+  const [getRecipeByID, { data: recipe, isLoading, error }] =
+    useGetRecipeByIdMutation();
+
+  useEffect(() => {
+    getRecipeByID(id).unwrap();
+  }, []);
 
   const loadingView = () => {
     return (
