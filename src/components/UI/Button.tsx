@@ -26,8 +26,12 @@ const Btn = styled.button`
 `;
 
 const Button: FC<Props> = ({ disabled, onClick, children }) => {
+  const onClickHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClick(e);
+  };
   return (
-    <Btn disabled={disabled} type="submit" onClick={(e) => onClick(e)}>
+    <Btn disabled={disabled} type="submit" onClick={(e) => onClickHandler(e)}>
       {children}
     </Btn>
   );

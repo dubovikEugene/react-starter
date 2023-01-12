@@ -5,14 +5,17 @@ import Collapse from "react-bootstrap/Collapse";
 import Alert from "react-bootstrap/Alert";
 import FullRecipe from "./FullRecipe/FullRecipe";
 import { useGetAllRecipesMutation } from "../services/RecipeService";
+import PaginationComponent from "./UI/PaginationComponent";
+import AmoutnRecipesFilter from "./AmountRecipesFilter";
 
 const RecipeList: React.FC = () => {
   const [getAllRecipes, { data: recipes, isLoading, isError }] =
     useGetAllRecipesMutation();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     getAllRecipes().unwrap();
-  }, []);
+  }, [page]);
 
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -40,10 +43,28 @@ const RecipeList: React.FC = () => {
     );
   };
 
+  const handlePage = (p: number) => {
+    setPage(p);
+  };
+
+  const recipeFilterOptions = [
+    { value: 3, name: 3 },
+    { value: 6, name: 6 },
+    { value: 10, name: 10 },
+  ];
+
   const recipesView = () => {
     return (
       <div className="d-flex flex-column align-aitems-center mb-5 mt-5">
         <h1 className="mt-5 text-center">Recipe List</h1>
+        <AmoutnRecipesFilter
+          defaultValue={3}
+          options={[
+            { value: 3, name: 3 },
+            { value: 6, name: 6 },
+            { value: 10, name: 10 },
+          ]}
+        />
         <ListGroup className="w-100 mx-auto justify-content-center mt-4">
           {recipes?.recipes.map((recipe) => (
             <div key={recipe.id}>
@@ -68,6 +89,11 @@ const RecipeList: React.FC = () => {
             </div>
           ))}
         </ListGroup>
+        <PaginationComponent
+          totalPages={10}
+          currentPage={page}
+          changeCurrentPage={handlePage}
+        />
       </div>
     );
   };

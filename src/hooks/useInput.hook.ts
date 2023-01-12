@@ -12,11 +12,19 @@ export const useInput = ({ initialValue, validations }: IInput) => {
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const valid = useValidation(value, validations);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setValue(e.target.value);
   };
 
-  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const onBlur = (
+    e:
+      | React.FocusEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setIsDirty(true);
   };
 

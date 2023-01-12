@@ -2,15 +2,15 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 interface Props {
-  type: string;
   name?: string;
   placeholder?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   id?: string;
   labelText?: string;
 }
+
 const Label = styled.label`
   display: block;
   font-weight: 600;
@@ -19,7 +19,7 @@ const Label = styled.label`
   color: #24292e;
 `;
 
-const StyledInput = styled.input`
+const StyledTextarea = styled.textarea`
   width: 100%;
   background: #fff;
   border: 1px solid #d1d5da;
@@ -38,8 +38,7 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input: FC<Props> = ({
-  type,
+const Textarea: FC<Props> = ({
   name,
   placeholder,
   value,
@@ -51,8 +50,7 @@ const Input: FC<Props> = ({
   return (
     <>
       <Label htmlFor={id}>{labelText}</Label>
-      <StyledInput
-        type={type}
+      <StyledTextarea
         name={name}
         placeholder={placeholder}
         value={value}
@@ -64,4 +62,4 @@ const Input: FC<Props> = ({
   );
 };
 
-export default Input;
+export default Textarea;

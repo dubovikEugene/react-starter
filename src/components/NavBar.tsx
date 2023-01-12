@@ -85,6 +85,11 @@ const NavBar = () => {
             </Link>
           </StyledLi>
           <StyledLi>
+            <Link to="/create_recipe" className="link">
+              Create recipe
+            </Link>
+          </StyledLi>
+          <StyledLi>
             <div
               className="logout"
               onClick={(e) => {

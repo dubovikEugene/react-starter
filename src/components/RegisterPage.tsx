@@ -8,9 +8,10 @@ import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { useRegisterUserMutation } from "../services/AuthService";
 import { Spinner } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 import { setCredentials } from "../redux/authSlice";
+import { RootState } from "../redux/store";
 
 const Container = styled.div`
   margin-top: 5rem;
@@ -38,6 +39,10 @@ const RegisterPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userId = useSelector((state: RootState) => {
+    return state.auth.user.details.userKey;
+  });
 
   const request: AuthRequest = {
     email: "",
@@ -95,7 +100,6 @@ const RegisterPage = () => {
   };
 
   const handleRegister = async (e: React.MouseEvent) => {
-    e.preventDefault();
     request.email = email.value;
     request.password = password.value;
     request.userName = userName.value;
@@ -114,6 +118,9 @@ const RegisterPage = () => {
       />
     );
   };
+  if (userId) {
+    return <Navigate to="/recipes" />;
+  }
 
   return (
     <Container>

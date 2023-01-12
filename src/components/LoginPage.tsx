@@ -1,11 +1,13 @@
+import { assertDebuggerStatement } from "@babel/types";
 import React from "react";
 import { Spinner } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { setCredentials } from "../redux/authSlice";
+import { RootState } from "../redux/store";
 import { useLoginUserMutation } from "../services/AuthService";
 import Button from "./UI/Button";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
@@ -40,9 +42,15 @@ const LoginPage = () => {
   };
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const userId = useSelector((state: RootState) => {
+    return state.auth.user.details.userKey;
+  });
+
+  if (userId) {
+    return <Navigate to="/recipes" />;
+  }
 
   const handleLogin = async (e: React.MouseEvent) => {
-    e.preventDefault();
     request.email = email.value;
     request.password = password.value;
     const response = await loginUser(request).unwrap();
@@ -59,18 +67,19 @@ const LoginPage = () => {
   };
 
   const errorMessageHandler = () => {
-    if (error) {
-      if ("status" in error) {
-        if ("data" in error) {
-          const errorMsgFromJSON =
-            "error" in error ? error.error : JSON.stringify(error.data);
-          const messeges = errorMsgFromJSON.split(":");
-          const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
-          return errorMsg;
-        }
-      }
-    }
-    return "";
+    // if (error) {
+    //   if ("status" in error) {
+    //     if ("data" in error) {
+    //       const errorMsgFromJSON =
+    //         "error" in error ? error.error : JSON.stringify(error.data);
+    //       const messeges = errorMsgFromJSON.split(":");
+    //       const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
+    //       return errorMsg;
+    //     }
+    //   }
+    // }
+    console.log(error);
+    return "Error";
   };
 
   const emailErrorsRender = () => {
