@@ -114,7 +114,6 @@ const RecipeList: React.FC = () => {
   useEffect(() => {
     indexHelper();
     let array = recipeList.recipes.slice(firstIndex, lastIndex);
-    console.log(array);
     if (array.length === 0) {
       setPage(1);
       setArrayForRender(recipeList.recipes.slice(0, numberElems));

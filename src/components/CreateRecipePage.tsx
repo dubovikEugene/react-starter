@@ -47,10 +47,14 @@ const CreateRecipePage = () => {
     request.append("cookingTime", cookingTime.value);
     request.append("recipe", recipeDescription.value);
     request.append("ingridients", JSON.stringify(ingredients));
-    const response = await addRecipe(request).unwrap();
-    console.log(response.img);
-    dispatch(setFullRecipe(response));
-    dispatch(setOneRecipe({ id: response.id, name: response.name }));
+    try {
+      const response = await addRecipe(request).unwrap();
+      dispatch(setFullRecipe(response));
+      dispatch(setOneRecipe({ id: response.id, name: response.name }));
+      alert("Recipe added");
+    } catch (error) {
+      alert("Error loading recipe, please add image");
+    }
   };
 
   return (
