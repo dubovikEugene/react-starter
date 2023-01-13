@@ -67,17 +67,17 @@ const LoginPage = () => {
   };
 
   const errorMessageHandler = () => {
-    // if (error) {
-    //   if ("status" in error) {
-    //     if ("data" in error) {
-    //       const errorMsgFromJSON =
-    //         "error" in error ? error.error : JSON.stringify(error.data);
-    //       const messeges = errorMsgFromJSON.split(":");
-    //       const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
-    //       return errorMsg;
-    //     }
-    //   }
-    // }
+    if (error) {
+      if ("status" in error) {
+        if ("data" in error) {
+          const errorMsgFromJSON =
+            "error" in error ? error.error : JSON.stringify(error.data);
+          const messeges = errorMsgFromJSON.split(":");
+          const errorMsg = messeges[1].substring(1, messeges[1].length - 2);
+          return errorMsg;
+        }
+      }
+    }
     console.log(error);
     return "Error";
   };

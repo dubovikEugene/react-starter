@@ -2,18 +2,20 @@ import { apiSlice } from "./../api/apiSlcie";
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../redux/authSlice";
-import recipesReducer from "../redux/recipeSlice";
+import recipesReducer from "./recipeListSlice";
+import fullRecipeReducer from "./fullRecipeSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
-  recipes: recipesReducer,
   auth: authReducer,
+  recipes: recipesReducer,
+  fullRecipes: fullRecipeReducer,
 });
 
 const persistConfig = {
-  key: "root",
+  key: "persist",
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);

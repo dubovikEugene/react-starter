@@ -49,7 +49,7 @@ const Input: FC<Props> = ({
   labelText,
 }) => {
   return (
-    <>
+    <div style={{ padding: "0 5px" }}>
       <Label htmlFor={id}>{labelText}</Label>
       <StyledInput
         type={type}
@@ -60,7 +60,7 @@ const Input: FC<Props> = ({
         onBlur={(e) => onBlur && onBlur(e)}
         id={id}
       />
-    </>
+    </div>
   );
 };
 

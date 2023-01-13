@@ -3,8 +3,8 @@ import { Form } from "react-bootstrap";
 import styled from "styled-components";
 
 interface IAmountRecipesFilter {
-  defaultValue: number;
   options: { value: number; name: number }[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const StyledTitle = styled.div`
@@ -13,8 +13,8 @@ const StyledTitle = styled.div`
 `;
 
 const AmountRecipesFilter: FC<IAmountRecipesFilter> = ({
-  defaultValue,
   options,
+  onChange,
 }) => {
   return (
     <div>
@@ -22,7 +22,12 @@ const AmountRecipesFilter: FC<IAmountRecipesFilter> = ({
         <StyledTitle>Recipes per page</StyledTitle>
       </label>
 
-      <Form.Select id="filter" size="sm" style={{ width: "8rem" }}>
+      <Form.Select
+        onChange={(e) => onChange(e)}
+        id="filter"
+        size="sm"
+        style={{ width: "8rem" }}
+      >
         {/* <option disabled defaultValue={defaultValue}>
           Choose one
         </option> */}
