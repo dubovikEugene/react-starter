@@ -11,6 +11,8 @@ import { useAddRecipeMutation } from "../services/RecipeService";
 import { useDispatch } from "react-redux";
 import { setFullRecipe } from "../redux/fullRecipeSlice";
 import { setOneRecipe } from "../redux/recipeListSlice";
+import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 const Container = styled.div`
   max-width: 30rem;
@@ -35,9 +37,10 @@ const CreateRecipePage = () => {
 
   const [selectedFile, setSelectedFile] = useState<string | Blob>("");
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]);
-  const [addRecipe] = useAddRecipeMutation();
+  const [addRecipe, { isLoading, error }] = useAddRecipeMutation();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const createRecipeHandler = async (e: React.MouseEvent) => {
     const request = new FormData();
@@ -51,10 +54,21 @@ const CreateRecipePage = () => {
       const response = await addRecipe(request).unwrap();
       dispatch(setFullRecipe(response));
       dispatch(setOneRecipe({ id: response.id, name: response.name }));
+      navigate("/recipes");
       alert("Recipe added");
     } catch (error) {
       alert("Error loading recipe, please add image");
     }
+  };
+
+  const loadingView = () => {
+    return (
+      <Spinner
+        animation="border"
+        variant="success"
+        className="mx-auto d-flex justify-content-center "
+      />
+    );
   };
 
   return (
@@ -94,8 +108,13 @@ const CreateRecipePage = () => {
         />
 
         <UploadFileButton setSelectedFile={setSelectedFile} />
-
-        <Button onClick={createRecipeHandler}>Create</Button>
+        {isLoading ? (
+          <Button disabled onClick={() => {}}>
+            {loadingView()}
+          </Button>
+        ) : (
+          <Button onClick={createRecipeHandler}>Create</Button>
+        )}
       </Form>
     </Container>
   );
