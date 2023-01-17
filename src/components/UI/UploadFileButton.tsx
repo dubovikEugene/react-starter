@@ -3,11 +3,6 @@ import styled from "styled-components";
 import { ReactComponent as MyLogo } from "../../images/svgUpload.svg";
 
 interface IUploadFileButton {
-  // fdAppend?: (
-  //   name: string,
-  //   value: string | Blob,
-  //   fileName?: string | undefined
-  // ) => void;
   setSelectedFile: React.Dispatch<React.SetStateAction<string | Blob>>;
 }
 
