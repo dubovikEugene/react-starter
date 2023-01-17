@@ -28,13 +28,7 @@ export const recipeApiSlice = apiSlice.injectEndpoints({
       query: (body: FormData) => ({
         url: "api/files2.php",
         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
         body: body,
-        // {
-        //   action: "add_recipe",
-        // },
       }),
     }),
   }),
