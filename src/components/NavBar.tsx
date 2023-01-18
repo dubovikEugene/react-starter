@@ -1,9 +1,9 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logOut } from "../redux/authSlice";
-import { RootState, useAppSelector } from "../redux/store";
+import { useAppSelector } from "../redux/store";
 
 const StyledUl = styled.ul`
   display: flex;
