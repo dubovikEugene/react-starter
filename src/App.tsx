@@ -1,7 +1,7 @@
-import "./styles/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
 import RoutesComponent from "./components/RoutesComponent";
+import "./styles/App.css";
 
 function App() {
   return (

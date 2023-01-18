@@ -1,17 +1,17 @@
 import React from "react";
+import { Spinner } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useInput } from "../hooks/useInput.hook";
+import { AuthRequest } from "../models/request/AuthRequest";
+import { setCredentials } from "../redux/authSlice";
+import { useAppSelector } from "../redux/store";
+import { useRegisterUserMutation } from "../services/AuthService";
+import Button from "./UI/Button";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
 import Form from "./UI/Form";
 import Input from "./UI/Input";
-import Button from "./UI/Button";
-import { useInput } from "../hooks/useInput.hook";
-import { AuthRequest } from "../models/request/AuthRequest";
-import { useRegisterUserMutation } from "../services/AuthService";
-import { Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
-import { setCredentials } from "../redux/authSlice";
-import { RootState } from "../redux/store";
 
 const Container = styled.div`
   margin-top: 5rem;
@@ -40,7 +40,7 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userId = useSelector((state: RootState) => {
+  const userId = useAppSelector((state) => {
     return state.auth.user.details.userKey;
   });
 

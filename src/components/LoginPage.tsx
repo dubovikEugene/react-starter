@@ -1,13 +1,12 @@
-import { assertDebuggerStatement } from "@babel/types";
 import React from "react";
 import { Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { setCredentials } from "../redux/authSlice";
-import { RootState } from "../redux/store";
+import { useAppSelector } from "../redux/store";
 import { useLoginUserMutation } from "../services/AuthService";
 import Button from "./UI/Button";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
@@ -42,7 +41,7 @@ const LoginPage = () => {
   };
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
-  const userId = useSelector((state: RootState) => {
+  const userId = useAppSelector((state) => {
     return state.auth.user.details.userKey;
   });
 

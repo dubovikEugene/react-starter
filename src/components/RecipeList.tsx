@@ -3,13 +3,13 @@ import Alert from "react-bootstrap/Alert";
 import Collapse from "react-bootstrap/Collapse";
 import ListGroup from "react-bootstrap/ListGroup";
 import Spinner from "react-bootstrap/Spinner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import { removeRecipes, setRecipes } from "../redux/recipeListSlice";
-import { RootState } from "../redux/store";
+import { useAppSelector } from "../redux/store";
 import { useGetAllRecipesMutation } from "../services/RecipeService";
 import AmoutnRecipesFilter from "./AmountRecipesFilter";
 import FullRecipe from "./FullRecipe/FullRecipe";
@@ -34,7 +34,7 @@ const RecipeList: React.FC = () => {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
-  const recipeList = useSelector((state: RootState) => {
+  const recipeList = useAppSelector((state) => {
     return state.recipes;
   });
 

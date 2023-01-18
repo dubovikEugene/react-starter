@@ -1,11 +1,12 @@
-import { apiSlice } from "./../api/apiSlcie";
-import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../redux/authSlice";
-import recipesReducer from "./recipeListSlice";
-import fullRecipeReducer from "./fullRecipeSlice";
-import storage from "redux-persist/lib/storage";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import authReducer from "../redux/authSlice";
+import { apiSlice } from "./../api/apiSlcie";
+import fullRecipeReducer from "./fullRecipeSlice";
+import recipesReducer from "./recipeListSlice";
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
@@ -29,5 +30,6 @@ const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;
