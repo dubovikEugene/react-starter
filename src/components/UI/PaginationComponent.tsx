@@ -43,7 +43,7 @@ const PaginationComponent: FC<IPagination> = ({
       pageItems.push(
         <Pagination.Item
           key={page}
-          active={page == currentPage}
+          active={page === currentPage}
           onClick={() => changeCurrentPage(page)}
         >
           {page}

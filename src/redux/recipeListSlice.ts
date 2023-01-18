@@ -1,6 +1,5 @@
-import { IFullRecipe } from "../models/IFullRecipe";
-import { IRecipeList } from "../models/IRecipeList";
 import { createSlice } from "@reduxjs/toolkit";
+import { IRecipeList } from "../models/IRecipeList";
 
 const initialState: IRecipeList = {
   recipes: [],
