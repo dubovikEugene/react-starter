@@ -1,16 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Alert from "react-bootstrap/Alert";
+import Collapse from "react-bootstrap/Collapse";
 import ListGroup from "react-bootstrap/ListGroup";
 import Spinner from "react-bootstrap/Spinner";
-import Collapse from "react-bootstrap/Collapse";
-import Alert from "react-bootstrap/Alert";
-import FullRecipe from "./FullRecipe/FullRecipe";
-import { useGetAllRecipesMutation } from "../services/RecipeService";
-import PaginationComponent from "./UI/PaginationComponent";
-import AmoutnRecipesFilter from "./AmountRecipesFilter";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { removeRecipes, setRecipes } from "../redux/recipeListSlice";
+import { useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
+import { removeRecipes, setRecipes } from "../redux/recipeListSlice";
+import { RootState } from "../redux/store";
+import { useGetAllRecipesMutation } from "../services/RecipeService";
+import AmoutnRecipesFilter from "./AmountRecipesFilter";
+import FullRecipe from "./FullRecipe/FullRecipe";
+import PaginationComponent from "./UI/PaginationComponent";
 
 const Btn = styled.button`
   margin: 0.5rem;
@@ -35,6 +38,19 @@ const RecipeList: React.FC = () => {
     return state.recipes;
   });
 
+  const location = useLocation();
+  const notifySucces = (message: string) =>
+    toast.success(`${message}`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
   const fetchREcipes = () => {
     getAllRecipes()
       .unwrap()
@@ -47,6 +63,9 @@ const RecipeList: React.FC = () => {
   useEffect(() => {
     if (recipeList.recipes.length < 1) {
       fetchREcipes();
+    }
+    if (location.state) {
+      notifySucces("Recipe created successfully");
     }
   }, []);
 
@@ -161,6 +180,7 @@ const RecipeList: React.FC = () => {
             </div>
           ))}
         </ListGroup>
+        <ToastContainer />
         <PaginationComponent
           totalPages={totalPages}
           currentPage={page}
