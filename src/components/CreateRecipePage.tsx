@@ -73,8 +73,17 @@ const CreateRecipePage = () => {
         },
       });
     } catch (error) {
-      notify("Error loading recipe, please add image");
+      notify("Error loading recipe");
     }
+  };
+
+  const isButtonDisabled = () => {
+    return (
+      !recipeName.valid.isValidInput ||
+      !recipeDescription.valid.isValidInput ||
+      !cookingTime.valid.isValidInput ||
+      !selectedFile
+    );
   };
 
   const loadingView = () => {
@@ -129,7 +138,9 @@ const CreateRecipePage = () => {
             {loadingView()}
           </Button>
         ) : (
-          <Button onClick={createRecipeHandler}>Create</Button>
+          <Button disabled={isButtonDisabled()} onClick={createRecipeHandler}>
+            Create
+          </Button>
         )}
       </Form>
       <ToastContainer />
