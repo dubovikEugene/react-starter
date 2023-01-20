@@ -24,8 +24,18 @@ export const recipeApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    addRecipe: builder.mutation<IFullRecipe, FormData>({
+      query: (body: FormData) => ({
+        url: "api/files2.php",
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllRecipesMutation, useGetRecipeByIdMutation } =
-  recipeApiSlice;
+export const {
+  useGetAllRecipesMutation,
+  useGetRecipeByIdMutation,
+  useAddRecipeMutation,
+} = recipeApiSlice;

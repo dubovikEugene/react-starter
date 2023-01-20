@@ -1,9 +1,9 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logOut } from "../redux/authSlice";
-import { RootState } from "../redux/store";
+import { useAppSelector } from "../redux/store";
 
 const StyledUl = styled.ul`
   display: flex;
@@ -85,6 +85,11 @@ const NavBar = () => {
             </Link>
           </StyledLi>
           <StyledLi>
+            <Link to="/create_recipe" className="link">
+              Create recipe
+            </Link>
+          </StyledLi>
+          <StyledLi>
             <div
               className="logout"
               onClick={(e) => {
@@ -98,7 +103,7 @@ const NavBar = () => {
       </>
     );
   };
-  const userKey = useSelector((state: RootState) => {
+  const userKey = useAppSelector((state) => {
     return state.auth.user.details.userKey;
   });
   return <>{userKey ? renderPrivateNavBar() : renderPublickNavBar()}</>;

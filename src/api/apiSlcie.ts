@@ -51,7 +51,6 @@ const baseQueryWithReauth: BaseQueryFn<
       api.dispatch(setCredentials(newCredentials));
       result = await baseQuery(args, api, extraOptions);
     } else {
-      console.log("logout");
       api.dispatch(logOut());
     }
   }

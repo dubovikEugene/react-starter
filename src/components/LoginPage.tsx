@@ -1,11 +1,12 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useInput } from "../hooks/useInput.hook";
 import { AuthRequest } from "../models/request/AuthRequest";
 import { setCredentials } from "../redux/authSlice";
+import { useAppSelector } from "../redux/store";
 import { useLoginUserMutation } from "../services/AuthService";
 import Button from "./UI/Button";
 import CreateOrLoginComponent from "./UI/CreateOrLoginComponent";
@@ -40,9 +41,15 @@ const LoginPage = () => {
   };
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const userId = useAppSelector((state) => {
+    return state.auth.user.details.userKey;
+  });
+
+  if (userId) {
+    return <Navigate to="/recipes" />;
+  }
 
   const handleLogin = async (e: React.MouseEvent) => {
-    e.preventDefault();
     request.email = email.value;
     request.password = password.value;
     const response = await loginUser(request).unwrap();
@@ -70,7 +77,8 @@ const LoginPage = () => {
         }
       }
     }
-    return "";
+    console.log(error);
+    return "Error";
   };
 
   const emailErrorsRender = () => {

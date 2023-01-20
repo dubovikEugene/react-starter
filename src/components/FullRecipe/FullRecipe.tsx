@@ -5,6 +5,9 @@ import styled, { keyframes } from "styled-components";
 import { Alert, Spinner } from "react-bootstrap";
 import { flipInY } from "react-animations";
 import { useGetRecipeByIdMutation } from "../../services/RecipeService";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { setFullRecipe } from "../../redux/fullRecipeSlice";
 
 const Container = styled.div`
   justify-content: center;
@@ -34,11 +37,23 @@ const FlipInYDiv = styled.div`
 `;
 
 const FullRecipe: FC<{ id: string }> = ({ id }) => {
-  const [getRecipeByID, { data: recipe, isLoading, error }] =
-    useGetRecipeByIdMutation();
+  const [getRecipeByID, { isLoading, error }] = useGetRecipeByIdMutation();
+  const dispatch = useDispatch();
+
+  const fullRecipes = useSelector((state: RootState) => {
+    return state.fullRecipes.fullRecipes;
+  });
+
+  let fullRecipeDescription = fullRecipes.find((elem) => elem.id === id);
 
   useEffect(() => {
-    getRecipeByID(id).unwrap();
+    if (!fullRecipeDescription) {
+      getRecipeByID(id)
+        .unwrap()
+        .then((resp) => {
+          dispatch(setFullRecipe(resp));
+        });
+    }
   }, []);
 
   const loadingView = () => {
@@ -61,11 +76,11 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
             <Container>
               <Content>
                 <RecipePartsContainer>
-                  <img src={`${recipe?.img}`} alt="dish" />
+                  <img src={`${fullRecipeDescription?.img}`} alt="dish" />
                 </RecipePartsContainer>
                 <RecipePartsContainer>
                   <div className="justify-content-center">
-                    Cooking time (min): {recipe?.cookingTime}
+                    Cooking time (min): {fullRecipeDescription?.cookingTime}
                   </div>
                 </RecipePartsContainer>
               </Content>
@@ -73,7 +88,7 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
                 <RecipePartsContainer>
                   <RecipeParts>Ingredients</RecipeParts>
                   <div>
-                    {recipe?.ingridients.map((ingridient) => (
+                    {fullRecipeDescription?.ingridients.map((ingridient) => (
                       <Ingredient
                         name={ingridient.name}
                         quantity={ingridient.quantity}
@@ -84,7 +99,7 @@ const FullRecipe: FC<{ id: string }> = ({ id }) => {
                 </RecipePartsContainer>
                 <RecipePartsContainer>
                   <RecipeParts>Method</RecipeParts>
-                  <div>{recipe?.recipe}</div>
+                  <div>{fullRecipeDescription?.recipe}</div>
                 </RecipePartsContainer>
               </Content>
             </Container>

@@ -5,10 +5,11 @@ interface Props {
   disabled?: boolean;
   onClick: (e: React.MouseEvent) => void;
   children?: React.ReactNode;
+  type?: "submit" | "button" | "reset" | undefined;
+  width?: string;
 }
-
 const Btn = styled.button`
-  margin-top: 20px;
+  margin-top: 10px;
   background-color: #0d6efd;
   border: 1px solid rgba(27, 31, 35, 0.2);
   width: 100%;
@@ -25,9 +26,17 @@ const Btn = styled.button`
   }
 `;
 
-const Button: FC<Props> = ({ disabled, onClick, children }) => {
+const Button: FC<Props> = ({ disabled, onClick, children, ...props }) => {
+  const onClickHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClick(e);
+  };
   return (
-    <Btn disabled={disabled} type="submit" onClick={(e) => onClick(e)}>
+    <Btn
+      disabled={disabled}
+      type={props.type ? props.type : "submit"}
+      onClick={(e) => onClickHandler(e)}
+    >
       {children}
     </Btn>
   );
